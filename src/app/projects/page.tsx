@@ -1,9 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import Masonry from "../components/Masonry";
+// Dynamic import to avoid SSR issues
+const Masonry = dynamic(() => import("../components/Masonry"), { ssr: false });
 
 // src/data/projects.ts
 
@@ -302,32 +304,6 @@ export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const filteredProjects =
-    selectedCategory === "All"
-      ? projects
-      : projects.filter((project) => project.category === selectedCategory);
-
-  // Transform projects to ChromaGrid format
-  const chromaGridItems = filteredProjects.map((project) => ({
-    image: project.image,
-    title: project.title,
-    subtitle: project.description,
-    handle: `#${project.category.toLowerCase().replace(/ /g, "")}`,
-    borderColor: getCategoryColor(project.category),
-    gradient: getCategoryGradient(project.category),
-    url: undefined, // We'll handle clicks internally
-    technologies: project.technologies,
-    projectId: project.id, // Add project ID for internal handling
-  }));
-
-  // Handle ChromaGrid item clicks
-  const handleChromaGridClick = (item: { projectId?: number }) => {
-    const project = projects.find((p) => p.id === item.projectId);
-    if (project) {
-      setSelectedProject(project);
-    }
-  };
-
   // Masonry gallery items
   const masonryItems = [
     {
@@ -379,28 +355,6 @@ export default function Projects() {
       height: 350,
     },
   ];
-
-  function getCategoryColor(category: string) {
-    const colors: { [key: string]: string } = {
-      "Web Application": "#3B82F6",
-      "Mobile App": "#10B981",
-      Analytics: "#F59E0B",
-      Productivity: "#EF4444",
-      "Web Design": "#8B5CF6",
-    };
-    return colors[category] || "#6B7280";
-  }
-
-  function getCategoryGradient(category: string) {
-    const gradients: { [key: string]: string } = {
-      "Web Application": "linear-gradient(145deg, #3B82F6, #1E40AF)",
-      "Mobile App": "linear-gradient(180deg, #10B981, #047857)",
-      Analytics: "linear-gradient(165deg, #F59E0B, #D97706)",
-      Productivity: "linear-gradient(195deg, #EF4444, #DC2626)",
-      "Web Design": "linear-gradient(225deg, #8B5CF6, #7C3AED)",
-    };
-    return gradients[category] || "linear-gradient(135deg, #6B7280, #374151)";
-  }
 
   return (
     <div className="min-h-screen bg-white py-12">
