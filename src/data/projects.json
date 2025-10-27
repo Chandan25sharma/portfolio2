@@ -1,0 +1,91 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "AI-Powered E-commerce Platform",
+      "description": "Built a full-stack e-commerce solution with personalized product recommendations using machine learning algorithms. Features include real-time inventory management, advanced search filters, and seamless payment integration.",
+      "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800",
+      "tags": ["React", "Node.js", "MongoDB", "AI/ML", "Stripe"],
+      "category": "Full Stack",
+      "status": "Completed",
+      "year": "2024",
+      "github": "https://github.com/user/ecommerce-ai",
+      "demo": "https://demo-ecommerce.com",
+      "featured": true
+    },
+    {
+      "id": 2,
+      "title": "Real-time Collaboration Tool",
+      "description": "Developed a web-based collaboration platform similar to Figma, enabling multiple users to work on design projects simultaneously with real-time synchronization and version control.",
+      "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800",
+      "tags": ["Next.js", "WebSocket", "Canvas API", "Redis", "PostgreSQL"],
+      "category": "Web App",
+      "status": "In Progress",
+      "year": "2024",
+      "github": "https://github.com/user/collab-tool",
+      "demo": "https://collab-demo.com",
+      "featured": true
+    },
+    {
+      "id": 3,
+      "title": "Blockchain Voting System",
+      "description": "Created a secure, transparent voting system using blockchain technology to ensure election integrity. Features voter authentication, immutable vote records, and real-time result tracking.",
+      "image": "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+      "tags": ["Solidity", "Web3.js", "React", "Ethereum", "IPFS"],
+      "category": "Blockchain",
+      "status": "Completed",
+      "year": "2023",
+      "github": "https://github.com/user/blockchain-voting",
+      "demo": "https://voting-demo.com",
+      "featured": false
+    },
+    {
+      "id": 4,
+      "title": "IoT Smart Home Dashboard",
+      "description": "Built an IoT dashboard for smart home management with real-time sensor data visualization, automated device control, and energy consumption analytics.",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+      "tags": ["React", "Python", "MQTT", "InfluxDB", "Grafana"],
+      "category": "IoT",
+      "status": "Completed",
+      "year": "2024",
+      "github": "https://github.com/user/smart-home",
+      "demo": "https://smarthome-demo.com",
+      "featured": true
+    },
+    {
+      "id": 5,
+      "title": "Mobile Finance Tracker",
+      "description": "Developed a React Native mobile app for personal finance management with expense tracking, budget planning, and investment portfolio monitoring.",
+      "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800",
+      "tags": ["React Native", "Firebase", "Chart.js", "Expo", "Redux"],
+      "category": "Mobile",
+      "status": "Completed",
+      "year": "2023",
+      "github": "https://github.com/user/finance-tracker",
+      "demo": "https://finance-demo.com",
+      "featured": false
+    },
+    {
+      "id": 6,
+      "title": "AI Content Generator",
+      "description": "Created an AI-powered content generation tool using GPT models for creating blog posts, social media content, and marketing copy with customizable tone and style.",
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800",
+      "tags": ["Python", "OpenAI API", "FastAPI", "React", "PostgreSQL"],
+      "category": "AI/ML",
+      "status": "In Progress",
+      "year": "2024",
+      "github": "https://github.com/user/ai-content",
+      "demo": "https://ai-content-demo.com",
+      "featured": true
+    }
+  ],
+  "categories": [
+    "All",
+    "Full Stack",
+    "Web App",
+    "Mobile",
+    "AI/ML",
+    "Blockchain",
+    "IoT"
+  ]
+}

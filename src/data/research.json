@@ -1,0 +1,232 @@
+{
+  "domains": [
+    {
+      "id": 0,
+      "label": "Spiking Neural Networks",
+      "description": "Bio-inspired neural computation using temporal spike patterns. Exploring energy-efficient learning algorithms and neuromorphic hardware implementations.",
+      "projects": [
+        "Temporal Pattern Recognition",
+        "Energy-Efficient SNN Training"
+      ],
+      "insights": [
+        "SNNs achieve 10x energy efficiency",
+        "Temporal coding enables real-time processing"
+      ]
+    },
+    {
+      "id": 1,
+      "label": "World Models & Embodied Learning",
+      "description": "Learning predictive models of environment dynamics through embodied interaction. Focus on few-shot adaptation and transfer learning.",
+      "projects": [
+        "Predictive World Models",
+        "Embodied Agent Simulation"
+      ],
+      "insights": [
+        "World models improve sample efficiency",
+        "Embodiment accelerates learning"
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Reasoning & Meta-Learning",
+      "description": "Developing systems that learn how to learn. Research into compositional reasoning and systematic generalization.",
+      "projects": ["Few-Shot Reasoning", "Compositional Learning"],
+      "insights": [
+        "Meta-learning enables rapid adaptation",
+        "Compositional structure improves generalization"
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Consciousness & AI Ethics",
+      "description": "Exploring computational models of consciousness and their ethical implications. Research into self-awareness and moral reasoning in AI systems.",
+      "projects": ["Consciousness Metrics", "Ethical AI Framework"],
+      "insights": [
+        "Consciousness may emerge from information integration",
+        "Ethics must be built into AI from the ground up"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "id": "e1",
+      "title": "Spiking Neural Network Pattern Recognition",
+      "abstract": "Developed a bio-inspired SNN architecture for real-time pattern recognition with 90% accuracy and 10x energy efficiency compared to traditional ANNs. Uses temporal spike encoding for feature extraction.",
+      "tags": ["SNN", "Pattern Recognition", "Neuromorphic"],
+      "domain": "Spiking Neural Networks",
+      "status": "Published",
+      "findings": "Temporal coding significantly improves energy efficiency while maintaining accuracy",
+      "dataset": "MNIST-DVS, N-MNIST",
+      "metrics": {
+        "accuracy": "90%",
+        "energyReduction": "10x",
+        "latency": "5ms"
+      }
+    },
+    {
+      "id": "e2",
+      "title": "World Model for Embodied Agent Navigation",
+      "abstract": "Implemented predictive world models enabling sample-efficient navigation in complex environments. Agent learns environment dynamics through embodied interaction and generalizes to unseen scenarios.",
+      "tags": ["World Models", "Embodied AI", "Navigation"],
+      "domain": "World Models & Embodied Learning",
+      "status": "In Progress",
+      "findings": "Embodied learning reduces sample complexity by 5x compared to model-free approaches",
+      "dataset": "Custom 3D environments, DeepMind Lab",
+      "metrics": {
+        "sampleEfficiency": "5x improvement",
+        "successRate": "85%",
+        "transferSuccess": "70%"
+      }
+    },
+    {
+      "id": "e3",
+      "title": "Meta-Learning for Few-Shot Reasoning Tasks",
+      "abstract": "Developed a meta-learning framework that enables rapid adaptation to new reasoning tasks with minimal examples. Combines gradient-based meta-learning with compositional representations.",
+      "tags": ["Meta-Learning", "Few-Shot", "Reasoning"],
+      "domain": "Reasoning & Meta-Learning",
+      "status": "Under Review",
+      "findings": "Compositional meta-learning achieves human-level performance on novel reasoning tasks",
+      "dataset": "ARC, SCAN, bAbI",
+      "metrics": {
+        "fewShotAccuracy": "92%",
+        "adaptationTime": "< 100 examples",
+        "generalization": "95%"
+      }
+    },
+    {
+      "id": "e4",
+      "title": "Consciousness Measurement Framework",
+      "abstract": "Developed computational metrics for measuring consciousness-like properties in AI systems based on Integrated Information Theory and Global Workspace Theory.",
+      "tags": ["Consciousness", "IIT", "Measurement"],
+      "domain": "Consciousness & AI Ethics",
+      "status": "Theoretical",
+      "findings": "Integrated information correlates with emergent self-awareness behaviors",
+      "dataset": "Synthetic cognitive architectures",
+      "metrics": {
+        "phiValue": "0.73",
+        "selfAwareness": "Medium",
+        "consistency": "88%"
+      }
+    },
+    {
+      "id": "e5",
+      "title": "Compression with Self-Organizing Maps",
+      "abstract": "Novel approach using SOMs to reduce high-dimensional sensory input while preserving semantic structure. Enables efficient online learning in resource-constrained environments.",
+      "tags": ["Compression", "SOM", "Unsupervised"],
+      "domain": "World Models & Embodied Learning",
+      "status": "Published",
+      "findings": "SOM-based compression maintains 95% semantic fidelity at 50x compression ratio",
+      "dataset": "ImageNet, CIFAR-100, Custom sensor data",
+      "metrics": {
+        "compressionRatio": "50x",
+        "semanticFidelity": "95%",
+        "reconstructionError": "< 0.05"
+      }
+    },
+    {
+      "id": "e6",
+      "title": "Ethical Reasoning in Autonomous Systems",
+      "abstract": "Framework for embedding ethical reasoning capabilities into autonomous systems using deontic logic and value alignment techniques.",
+      "tags": ["Ethics", "Autonomous Systems", "Value Alignment"],
+      "domain": "Consciousness & AI Ethics",
+      "status": "In Progress",
+      "findings": "Deontic logic enables consistent ethical decision-making under uncertainty",
+      "dataset": "Moral Machine dataset, Custom ethical dilemmas",
+      "metrics": {
+        "ethicalConsistency": "87%",
+        "humanAlignment": "82%",
+        "decisionTime": "< 100ms"
+      }
+    }
+  ],
+  "researchFindings": [
+    {
+      "id": "f1",
+      "title": "Spiking Neural Networks",
+      "description": "Temporal spike encoding achieves 10x energy efficiency while maintaining 90% accuracy on pattern recognition tasks.",
+      "metrics": [
+        { "label": "90% accuracy", "type": "performance" },
+        { "label": "10x efficiency", "type": "energy" }
+      ],
+      "paperUrl": "/papers/snn-temporal-encoding-2024.pdf",
+      "paperLabel": "📄 Paper"
+    },
+    {
+      "id": "f2", 
+      "title": "World Models",
+      "description": "Embodied learning reduces sample complexity by 5x compared to model-free approaches in navigation tasks.",
+      "metrics": [
+        { "label": "5x sample efficiency", "type": "efficiency" },
+        { "label": "85% success rate", "type": "performance" }
+      ],
+      "paperUrl": "https://demo.embodied-world-models.com",
+      "paperLabel": "🎮 Demo"
+    },
+    {
+      "id": "f3",
+      "title": "Meta-Learning", 
+      "description": "Compositional meta-learning achieves 92% accuracy on novel reasoning tasks.",
+      "metrics": [
+        { "label": "92% accuracy", "type": "performance" },
+        { "label": "Under Review", "type": "status" }
+      ],
+      "paperUrl": "/papers/meta-learning-compositional-2024.pdf",
+      "paperLabel": "📄 Paper"
+    },
+    {
+      "id": "f4",
+      "title": "Consciousness Metrics",
+      "description": "Integrated Information Theory correlates with emergent self-awareness behaviors.",
+      "metrics": [
+        { "label": "Φ = 0.73", "type": "measurement" },
+        { "label": "Theoretical", "type": "status" }
+      ],
+      "paperUrl": "/papers/consciousness-measurement-framework-2024.pdf",
+      "paperLabel": "🧠 Theory"
+    }
+  ],
+  "repositories": [
+    {
+      "id": "r1",
+      "name": "SNN-Pattern-Recognition",
+      "description": "Temporal spike encoding implementation",
+      "githubUrl": "https://github.com/research-lab/snn-pattern-recognition",
+      "paperUrl": "/papers/snn-temporal-encoding-2024.pdf"
+    },
+    {
+      "id": "r2",
+      "name": "Embodied-World-Models", 
+      "description": "Predictive navigation framework",
+      "githubUrl": "https://github.com/research-lab/embodied-world-models",
+      "demoUrl": "https://demo.embodied-world-models.com"
+    },
+    {
+      "id": "r3",
+      "name": "Meta-Learning-Framework",
+      "description": "Few-shot reasoning implementation",
+      "githubUrl": "https://github.com/research-lab/meta-learning-framework",
+      "paperUrl": "/papers/meta-learning-compositional-2024.pdf"
+    },
+    {
+      "id": "r4",
+      "name": "Consciousness-Metrics",
+      "description": "IIT-based measurement tools",
+      "githubUrl": "https://github.com/research-lab/consciousness-metrics",
+      "paperUrl": "/papers/consciousness-measurement-framework-2024.pdf"
+    },
+    {
+      "id": "r5",
+      "name": "SOM-Compression",
+      "description": "Self-organizing maps for dimensionality reduction",
+      "githubUrl": "https://github.com/research-lab/som-compression",
+      "paperUrl": "/papers/som-semantic-compression-2024.pdf"
+    },
+    {
+      "id": "r6",
+      "name": "Ethical-AI-Framework",
+      "description": "Deontic logic for autonomous systems",
+      "githubUrl": "https://github.com/research-lab/ethical-ai-framework",
+      "paperUrl": "/papers/ethical-reasoning-autonomous-systems-2024.pdf"
+    }
+  ]
+}
