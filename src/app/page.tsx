@@ -89,6 +89,38 @@ const techLogos = [
     href: "https://graphql.org",
   },
 ];
+const projects = [
+  {
+    title: "Coderspae",
+    subtitle: "Real-time Coding Battle Platform",
+    description:
+      "Interactive competitive coding platform with real-time battles and live spectators.",
+    tech: ["Next.js", "Socket.io", "React", "Node.js"],
+    liveDemo: "https://coderspae.com",
+    details: "/projects/coderspae",
+    image: "images/bgimg3.jpg", // add your actual image here
+  },
+  {
+    title: "BlueCollar App",
+    subtitle: "Home Services Booking Platform",
+    description:
+      "On-demand platform connecting users with local professionals for home services.",
+    tech: ["React Native", "Node.js", "MongoDB", "Stripe"],
+    liveDemo: "#",
+    details: "/projects/bluecollar",
+    image: "images/bgimg7.jpg",
+  },
+  {
+    title: "Portfolio Builder SaaS",
+    subtitle: "Developer Portfolio Generator",
+    description:
+      "SaaS platform for developers to generate animated portfolios using templates and AI assistance.",
+    tech: ["React", "TailwindCSS", "Node.js", "AI"],
+    liveDemo: "#",
+    details: "/projects/portfolio-builder",
+    image: "images/ecommerce-preview.jpg",
+  },
+];
 
 export default function Home() {
   return (
@@ -441,152 +473,55 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1 */}
-            <SplashCursor>
-              <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border border-gray-200">
-                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-black text-center">
-                      <SiReact className="h-12 w-12 mx-auto mb-2 opacity-80" />
-                      <p className="text-sm font-medium">E-commerce Platform</p>
+            {projects.map((project, index) => (
+              <SplashCursor key={index}>
+                <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border border-gray-200">
+                  <div className="h-48 bg-gray-200 relative overflow-hidden">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <p className="text-white text-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {project.subtitle}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-black mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-black mb-4">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tech.map((t, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-3">
+                      <Link
+                        href={project.details}
+                        className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                      >
+                        View Details
+                      </Link>
+                      <Link
+                        href={project.liveDemo}
+                        className="px-4 py-2 border border-black text-black rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                      >
+                        Live Demo
+                      </Link>
                     </div>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-black mb-2">
-                    Modern E-commerce
-                  </h3>
-                  <p className="text-black mb-4">
-                    Full-stack e-commerce platform with real-time inventory,
-                    payment integration, and admin dashboard.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      React
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      Node.js
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      MongoDB
-                    </span>
-                  </div>
-                  <div className="flex gap-3">
-                    <Link
-                      href="/projects"
-                      className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      View Details
-                    </Link>
-                    <Link
-                      href="#"
-                      className="px-4 py-2 border border-black text-black rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-                    >
-                      Live Demo
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SplashCursor>
-
-            {/* Project 2 */}
-            <SplashCursor>
-              <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border border-gray-200">
-                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-black text-center">
-                      <SiReact className="h-12 w-12 mx-auto mb-2 opacity-80" />
-                      <p className="text-sm font-medium">Collaboration Tool</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-black mb-2">
-                    Team Collaboration App
-                  </h3>
-                  <p className="text-black mb-4">
-                    Real-time collaboration platform with video calls, document
-                    sharing, and project management features.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      Next.js
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      WebRTC
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      Socket.io
-                    </span>
-                  </div>
-                  <div className="flex gap-3">
-                    <Link
-                      href="/projects"
-                      className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      View Details
-                    </Link>
-                    <Link
-                      href="#"
-                      className="px-4 py-2 border border-black text-black rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-                    >
-                      Live Demo
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SplashCursor>
-
-            {/* Project 3 */}
-            <SplashCursor>
-              <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border border-gray-200">
-                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-black text-center">
-                      <SiPython className="h-12 w-12 mx-auto mb-2 opacity-80" />
-                      <p className="text-sm font-medium">AI Dashboard</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-black mb-2">
-                    AI Analytics Dashboard
-                  </h3>
-                  <p className="text-black mb-4">
-                    Machine learning powered analytics dashboard with predictive
-                    insights and data visualization.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      Python
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      TensorFlow
-                    </span>
-                    <span className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border">
-                      D3.js
-                    </span>
-                  </div>
-                  <div className="flex gap-3">
-                    <Link
-                      href="/projects"
-                      className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      View Details
-                    </Link>
-                    <Link
-                      href="#"
-                      className="px-4 py-2 border border-black text-black rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-                    >
-                      Live Demo
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SplashCursor>
+              </SplashCursor>
+            ))}
           </div>
 
           <div className="text-center mt-12">
