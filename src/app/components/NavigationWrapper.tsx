@@ -16,7 +16,7 @@ const NavigationWrapper = () => {
 
   return (
     <PillNav
-      logo="/logo.png"
+      logo="/images/profile.jpg"
       logoAlt="Portfolio Logo"
       items={navItems}
       activeHref={pathname}
