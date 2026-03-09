@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio - Software Developer",
+  title: "Chandan Sharma | Full-Stack Developer & AI Engineer",
   description:
-    "A modern portfolio showcasing software development projects and expertise",
+    "Portfolio of Chandan Sharma — Full-Stack Developer specialising in AI/ML, React, Node.js and modern web technologies.",
 };
 
 export default function RootLayout({
