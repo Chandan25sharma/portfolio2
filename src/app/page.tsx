@@ -2,30 +2,26 @@
 
 import Link from "next/link";
 import {
-  SiCodepen,
-  SiDocker,
-  SiG2,
-  SiGit,
-  SiGithub,
-  SiGraphql,
-  SiJavascript,
-  SiLinkedin,
-  SiMongodb,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiPostgresql,
-  SiPython,
-  SiReact,
-  SiTailwindcss,
-  SiTypescript,
-  SiX,
+    SiCodepen,
+    SiDocker,
+    SiG2,
+    SiGit,
+    SiGithub,
+    SiGraphql,
+    SiJavascript,
+    SiLinkedin,
+    SiMongodb,
+    SiNextdotjs,
+    SiNodedotjs,
+    SiPostgresql,
+    SiPython,
+    SiReact,
+    SiTailwindcss,
+    SiTypescript,
+    SiX,
 } from "react-icons/si";
 import LogoLoop from "./components/LogoLoop";
-import { CardSwapAdvanced } from "./components/animations/AdvancedAnimations";
-import {
-  ShuffleText,
-  SplashCursor,
-} from "./components/animations/ReactBitsAnimations";
+import { ShuffleText } from "./components/animations/ReactBitsAnimations";
 
 const techLogos = [
   {
@@ -89,75 +85,42 @@ const techLogos = [
     href: "https://graphql.org",
   },
 ];
-const projects = [
-  {
-    title: "Coderspae",
-    subtitle: "Real-time Coding Battle Platform",
-    description:
-      "Interactive competitive coding platform with real-time battles and live spectators.",
-    tech: ["Next.js", "Socket.io", "React", "Node.js"],
-    liveDemo: "https://coderspae.com",
-    details: "/projects/coderspae",
-    image: "images/bgimg3.jpg", // add your actual image here
-  },
-  {
-    title: "BlueCollar App",
-    subtitle: "Home Services Booking Platform",
-    description:
-      "On-demand platform connecting users with local professionals for home services.",
-    tech: ["React Native", "Node.js", "MongoDB", "Stripe"],
-    liveDemo: "#",
-    details: "/projects/bluecollar",
-    image: "images/bgimg7.jpg",
-  },
-  {
-    title: "Portfolio Builder SaaS",
-    subtitle: "Developer Portfolio Generator",
-    description:
-      "SaaS platform for developers to generate animated portfolios using templates and AI assistance.",
-    tech: ["React", "TailwindCSS", "Node.js", "AI"],
-    liveDemo: "#",
-    details: "/projects/portfolio-builder",
-    image: "images/ecommerce-preview.jpg",
-  },
-];
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Hero Section */}
-      <section className="container mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-2 gap-12 items-center min-h-[80vh]">
-          <div className="space-y-6">
-            <h1 className="text-5xl font-bold text-gray-900 leading-tight">
-              Hello, I'm a
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-blue-600">
-                {" "}
+      <section className="container mx-auto px-6 pt-20 pb-10 md:py-20">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh] md:min-h-[80vh]">
+          <div className="space-y-5 text-center md:text-left">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+              Hello, I&apos;m
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-blue-600">
                 Chandan Sharma
               </span>
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Passionate about creating innovative solutions and building
-              amazing software experiences with modern technologies and best
-              practices.
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
+              Full-Stack Developer & AI/ML Engineer — building innovative,
+              scalable software experiences with modern technologies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-row gap-3 justify-center md:justify-start">
               <Link
                 href="/projects"
-                className="px-8 py-3 bg-gradient-to-r from-gray-900 to-gray-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 text-center"
+                className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-center text-sm sm:text-base"
               >
                 View My Work
               </Link>
               <Link
                 href="/contact"
-                className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300 text-center"
+                className="flex-1 sm:flex-none px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300 text-center text-sm sm:text-base"
               >
                 Get In Touch
               </Link>
             </div>
           </div>
 
-          <div className="flex justify-center">
+          {/* Code mockup — hidden on mobile */}
+          <div className="hidden md:flex justify-center">
             <div className="relative">
               <div className="w-80 h-80 bg-gradient-to-r from-gray-900 to-gray-400 rounded-2xl shadow-2xl">
                 <div className="absolute inset-4 bg-gray-900 rounded-xl overflow-hidden">
@@ -182,22 +145,20 @@ export default function Home() {
       </section>
 
       {/* About Snapshot Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 md:py-16 bg-white">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h2 className="text-3xl font-bold text-gray-900">About Me</h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="space-y-5">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">About Me</h2>
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                 I&apos;m a passionate software developer with 3+ years of
                 experience building scalable web applications. I specialize in
-                ML, DL, AI & full-stack development with modern Python &
-                JavaScript frameworks and have a keen eye for creating intuitive
-                user experiences.
+                ML, DL, AI &amp; full-stack development with modern Python &amp;
+                JavaScript frameworks.
               </p>
-              <p className="text-lg text-gray-600">
+              <p className="text-base md:text-lg text-gray-600">
                 <strong>Standout Achievement:</strong> Built a real-time
-                collaboration platform that handles 100,000+ concurrent users
-                with 99.9% uptime.
+                collaboration platform handling 100k+ concurrent users.
               </p>
               <Link
                 href="/about"
@@ -207,7 +168,8 @@ export default function Home() {
                 <SiGithub className="ml-2 h-4 w-4" />
               </Link>
             </div>
-            <div className="flex justify-center">
+            {/* Avatar hidden on mobile — saves space */}
+            <div className="hidden md:flex justify-center">
               <div className="relative">
                 <div className="w-64 h-64 bg-gradient-to-r from-gray-800 to-blue-800 rounded-full shadow-2xl">
                   <div className="absolute inset-4 bg-gray-100 rounded-full flex items-center justify-center">
@@ -243,293 +205,164 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Projects Section */}
-      <section className="py-16 bg-white">
+      {/* Experience & Education Section */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-black mb-4">
-              <ShuffleText text="Featured Projects" />
+              <ShuffleText text="Experience & Education" />
             </h2>
-            <p className="text-lg text-black">
-              Some of my best work that showcases my skills and expertise
+            <p className="text-lg text-gray-600">
+              My academic background and professional journey
             </p>
           </div>
 
-          {/* Interactive Project Showcase */}
-          <div className="mt-16 mb-12">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-black mb-4">
-                <ShuffleText text="Project Highlights" />
-              </h3>
-              <p className="text-black">Interactive showcase of key projects</p>
-            </div>
+          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
 
-            <CardSwapAdvanced
-              cards={[
-                {
-                  title: "E-commerce Platform",
-                  color: "from-black to-gray-800",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Full-stack e-commerce platform with real-time inventory
-                        and payment integration.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Real-time inventory management</li>
-                        <li>• Secure payment processing</li>
-                        <li>• Admin dashboard</li>
-                        <li>• Mobile responsive design</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "Team Collaboration App",
-                  color: "from-green-900 to-green-700",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Real-time collaboration platform with video calls and
-                        document sharing.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Video conferencing</li>
-                        <li>• Real-time document editing</li>
-                        <li>• Project management tools</li>
-                        <li>• Team chat features</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "AI Analytics Dashboard",
-                  color: "from-gray-900 to-gray-700",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Machine learning powered analytics dashboard with
-                        predictive insights and data visualization.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Predictive analytics</li>
-                        <li>• Data visualization charts</li>
-                        <li>• ML model integration</li>
-                        <li>• Custom report generation</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "AI Image Generation Tool",
-                  color: "from-blue-950 to-green-900",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Text-to-image generator built using Stable Diffusion and
-                        OpenAI API for creating custom visuals.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Prompt-based image generation</li>
-                        <li>• Fine-tuned AI model</li>
-                        <li>• Image enhancement & upscaling</li>
-                        <li>• Gallery and share features</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "Real-time Service Booking App",
-                  color: "from-emerald-900 to-teal-700",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        On-demand platform connecting users with local
-                        professionals for home services.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Real-time booking and tracking</li>
-                        <li>• Integrated payment gateway</li>
-                        <li>• Multi-vendor management</li>
-                        <li>• Push notifications and ratings</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "AI Code Assistant",
-                  color: "from-blue-950 to-cyan-950",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        AI-powered code assistant that provides real-time
-                        suggestions, debugging help, and code generation.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Context-aware code completion</li>
-                        <li>• Debugging and optimization</li>
-                        <li>• Support for multiple languages</li>
-                        <li>• Chat-based AI interface</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "Realtime Coding Battle Platform",
-                  color: "from-slate-900 to-gray-800",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Interactive competitive coding platform with real-time
-                        battles and live spectators.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Live coding duels</li>
-                        <li>• Socket.io based collaboration</li>
-                        <li>• AI challenge generation</li>
-                        <li>• Spectator voting system</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "AI Resume Analyzer",
-                  color: "from-gray-900 to-gray-600",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        NLP-based resume analyzer that scores resumes based on
-                        skill relevance and job fit.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Natural language processing</li>
-                        <li>• Skill and keyword extraction</li>
-                        <li>• AI scoring system</li>
-                        <li>• Resume optimization feedback</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "Voice-Controlled Smart Dashboard",
-                  color: "from-blue-900 to-gray-700",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Voice-assisted IoT dashboard with AI command recognition
-                        and data visualization.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Voice command control</li>
-                        <li>• IoT data visualization</li>
-                        <li>• Real-time sensor updates</li>
-                        <li>• Multi-device sync</li>
-                      </ul>
-                    </div>
-                  ),
-                },
-                {
-                  title: "Portfolio Builder SaaS",
-                  color: "from-green-950 to-green-850",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        SaaS platform for developers to generate animated
-                        portfolios using templates and AI assistance.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Drag-and-drop editor</li>
-                        <li>• AI text & image suggestions</li>
-                        <li>• Cloud hosting integration</li>
-                        <li>• Template customization</li>
-                      </ul>
-                    </div>
-                  ),
-                },
+            {/* Education Column */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0121 10.634V17a2 2 0 01-1.105 1.789l-6 3a2 2 0 01-1.79 0l-6-3A2 2 0 013 17v-6.366c0-.417.08-.83.234-1.213L12 14z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-black">Education</h3>
+              </div>
 
-                {
-                  title: "AI Analytics Dashboard",
-                  color: "from-gray-900 to-gray-700",
-                  content: (
-                    <div>
-                      <p className="text-lg mb-6">
-                        Machine learning powered analytics with predictive
-                        insights.
-                      </p>
-                      <ul className="space-y-2 text-left">
-                        <li>• Predictive analytics</li>
-                        <li>• Data visualization</li>
-                        <li>• ML model integration</li>
-                        <li>• Custom reporting</li>
-                      </ul>
+              <div className="relative pl-6 border-l-2 border-gray-200">
+                {/* B.Tech */}
+                <div className="mb-8 relative">
+                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-black border-4 border-white shadow" />
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2020 – 2024</span>
+                      <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full">Graduated</span>
                     </div>
-                  ),
-                },
-              ]}
-              className="max-w-4xl mx-auto"
-              autoPlay={true}
-              interval={5000}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <SplashCursor key={index}>
-                <div className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border border-gray-200">
-                  <div className="h-48 bg-gray-200 relative overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <p className="text-white text-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {project.subtitle}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-black mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-black mb-4">{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((t, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-gray-100 text-black rounded-full text-sm border"
-                        >
-                          {t}
-                        </span>
+                    <h4 className="text-base font-bold text-black mb-1">
+                      B.Tech — Computer Science Engineering
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3">JNTU-Kakinada</p>
+                    <p className="text-sm text-gray-700">
+                      Bachelor of Technology specialising in Computer Science Engineering, with a focus on Machine Learning, Data Science, and Software Development. Graduated in 2024.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {["Python", "ML", "Data Science", "Java", "C++"].map((s) => (
+                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
                       ))}
-                    </div>
-                    <div className="flex gap-3">
-                      <Link
-                        href={project.details}
-                        className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-                      >
-                        View Details
-                      </Link>
-                      <Link
-                        href={project.liveDemo}
-                        className="px-4 py-2 border border-black text-black rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-                      >
-                        Live Demo
-                      </Link>
                     </div>
                   </div>
                 </div>
-              </SplashCursor>
+              </div>
+            </div>
+
+            {/* Experience Column */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-black">Experience</h3>
+              </div>
+
+              <div className="relative pl-6 border-l-2 border-gray-200 space-y-8">
+
+                {/* Current Role */}
+                <div className="relative">
+                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-black border-4 border-white shadow" />
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2025 – Present</span>
+                      <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">Current</span>
+                    </div>
+                    <h4 className="text-base font-bold text-black mb-1">
+                      IT Specialist — AI/ML & Full-Stack
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3">Al-Mahroos Sons & Co.</p>
+                    <p className="text-sm text-gray-700">
+                      Leading development of scalable AI tools to automate the sales process. Building web applications using React, Node.js, and Oracle SQL.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {["Python", "React", "Node.js", "Oracle SQL", "TypeScript"].map((s) => (
+                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* System Admin */}
+                <div className="relative">
+                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-gray-400 border-4 border-white shadow" />
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2024</span>
+                    </div>
+                    <h4 className="text-base font-bold text-black mb-1">
+                      System Administrator & Web Handler
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3">RJE Technology Pvt. Ltd.</p>
+                    <p className="text-sm text-gray-700">
+                      Managed web infrastructure and maintained applications with a focus on performance, uptime, and user experience.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {["Vue.js", "Python", "MongoDB", "Docker"].map((s) => (
+                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Internship */}
+                <div className="relative">
+                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-gray-400 border-4 border-white shadow" />
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Jan 2024 – Jul 2024</span>
+                      <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Internship</span>
+                    </div>
+                    <h4 className="text-base font-bold text-black mb-1">
+                      Software Development Intern
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-3">Fuzion 5 Technology</p>
+                    <p className="text-sm text-gray-700">
+                      Worked on full-stack web development projects, contributing to front-end UI design and back-end API integrations during a 7-month internship.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {["React", "Node.js", "JavaScript", "REST APIs"].map((s) => (
+                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          {/* Achievement highlight bar */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {[
+              { value: "3+", label: "Years of Experience" },
+              { value: "25+", label: "Projects Completed" },
+              { value: "2024", label: "B.Tech Graduate" },
+              { value: "7 mo", label: "Internship Duration" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                <div className="text-3xl font-bold text-black mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-10">
             <Link
-              href="/projects"
+              href="/about"
               className="inline-flex items-center px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
             >
-              View All Projects
+              View Full Profile
               <SiGithub className="ml-2 h-4 w-4" />
             </Link>
           </div>

@@ -331,7 +331,7 @@ export default function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  placeholder="your.email@galaxy.com"
+                  placeholder="mrchandansharma25@gmail.com"
                   className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-blue-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300 focus:bg-white/15"
                 />
               </motion.div>

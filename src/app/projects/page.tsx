@@ -283,7 +283,7 @@ export const projects: Project[] = [
       "Prisma",
       "PostgreSQL",
     ],
-    githubUrl: "https://github.com/yourusername/ai-chatbot",
+    githubUrl: "https://github.com/Chandan25sharma/AI-Chatbot",
     liveUrl: "https://ai-chatbot-demo.vercel.app",
     slug: "ai-chatbot",
     category: "AI/ML",
