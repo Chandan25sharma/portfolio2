@@ -50,12 +50,6 @@
   margin-left: 8px;
 }
 
-@keyframes logo-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-
 .pill-logo {
   width: var(--nav-h);
   height: var(--nav-h);
@@ -67,12 +61,10 @@
   justify-content: center;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  animation: logo-pulse 3s ease-in-out infinite;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .pill-logo:hover {
-  animation-play-state: paused;
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }

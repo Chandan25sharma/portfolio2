@@ -2,26 +2,25 @@
 
 import Link from "next/link";
 import {
-    SiCodepen,
-    SiDocker,
-    SiG2,
-    SiGit,
-    SiGithub,
-    SiGraphql,
-    SiJavascript,
-    SiLinkedin,
-    SiMongodb,
-    SiNextdotjs,
-    SiNodedotjs,
-    SiPostgresql,
-    SiPython,
-    SiReact,
-    SiTailwindcss,
-    SiTypescript,
-    SiX,
+  SiCodepen,
+  SiDocker,
+  SiG2,
+  SiGit,
+  SiGithub,
+  SiGraphql,
+  SiJavascript,
+  SiLinkedin,
+  SiMongodb,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+  SiX,
 } from "react-icons/si";
 import LogoLoop from "./components/LogoLoop";
-import { ShuffleText } from "./components/animations/ReactBitsAnimations";
 
 const techLogos = [
   {
@@ -210,7 +209,7 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-black mb-4">
-              <ShuffleText text="Experience & Education" />
+              Experience & Education
             </h2>
             <p className="text-lg text-gray-600">
               My academic background and professional journey
@@ -523,7 +522,7 @@ export default function Home() {
             </Link>
 
             <Link
-              href="mailto:your.email@example.com"
+              href="mailto:mrchandansharma25@gmail.com"
               className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300"
             >
               Send Email

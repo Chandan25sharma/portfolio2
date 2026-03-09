@@ -155,28 +155,9 @@ const PillNav: React.FC<PillNavProps> = ({
       gsap.set(menu, { visibility: "hidden", opacity: 0, scaleY: 1 });
     }
 
-    if (initialLoadAnimation) {
-      const logo = logoRef.current;
-      const navItems = navItemsRef.current;
-
-      if (logo) {
-        gsap.set(logo, { scale: 0 });
-        gsap.to(logo, {
-          scale: 1,
-          duration: 0.6,
-          ease,
-        });
-      }
-
-      if (navItems) {
-        gsap.set(navItems, { width: 0, overflow: "hidden" });
-        gsap.to(navItems, {
-          width: "auto",
-          duration: 0.6,
-          ease,
-        });
-      }
-    }
+    // Stationary initialization
+    if (logoRef.current) gsap.set(logoRef.current, { scale: 1 });
+    if (navItemsRef.current) gsap.set(navItemsRef.current, { width: "auto", overflow: "visible" });
 
     return () => window.removeEventListener("resize", onResize);
   }, [items, ease, initialLoadAnimation]);
@@ -204,18 +185,7 @@ const PillNav: React.FC<PillNavProps> = ({
   };
 
   const handleLogoEnter = () => {
-    const img = logoImgRef.current;
-    if (!img) return;
-    if (logoTweenRef.current) {
-      logoTweenRef.current.kill();
-    }
-    gsap.set(img, { rotate: 0 });
-    logoTweenRef.current = gsap.to(img, {
-      rotate: 360,
-      duration: 0.2,
-      ease,
-      overwrite: "auto",
-    });
+    // No rotation, just handle via CSS hover scale
   };
 
   const closeMobileMenu = () => {
