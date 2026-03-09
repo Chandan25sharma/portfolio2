@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiArrowUp, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
 import {
-  SiCodepen,
-  SiDribbble,
-  SiGithub,
-  SiLinkedin,
-  SiX,
+    SiCodepen,
+    SiDribbble,
+    SiGithub,
+    SiLinkedin,
+    SiX,
 } from "react-icons/si";
 
 const Footer = () => {
@@ -46,7 +46,7 @@ const Footer = () => {
             {/* Brand Section */}
             <div className="md:col-span-2">
               <div className="mb-6">
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <h3 className="text-2xl font-bold text-white">
                   Portfolio
                 </h3>
                 <p className="text-gray-300 mt-4 max-w-md">
@@ -59,15 +59,15 @@ const Footer = () => {
               {/* Quick Contact */}
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 text-gray-300">
-                  <FiMail className="h-4 w-4 text-blue-400" />
+                  <FiMail className="h-4 w-4 text-gray-400" />
                   <span>mrchandansharma25@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">
-                  <FiPhone className="h-4 w-4 text-blue-400" />
+                  <FiPhone className="h-4 w-4 text-gray-400" />
                   <span>+977 9704714937</span>
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300">
-                  <FiMapPin className="h-4 w-4 text-blue-400" />
+                  <FiMapPin className="h-4 w-4 text-gray-400" />
                   <span>Kathmandu, Nepal</span>
                 </div>
               </div>
@@ -82,7 +82,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/"
-                    className="text-gray-300 hover:text-blue-400 transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     Home
                   </Link>
@@ -90,7 +90,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/about"
-                    className="text-gray-300 hover:text-blue-400 transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     About
                   </Link>
@@ -98,7 +98,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/projects"
-                    className="text-gray-300 hover:text-blue-400 transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     Projects
                   </Link>
@@ -106,7 +106,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/research"
-                    className="text-gray-300 hover:text-blue-400 transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     Research
                   </Link>
@@ -114,7 +114,7 @@ const Footer = () => {
                 <li>
                   <Link
                     href="/contact"
-                    className="text-gray-300 hover:text-blue-400 transition-colors"
+                    className="text-gray-300 hover:text-white transition-colors"
                   >
                     Contact
                   </Link>
@@ -220,7 +220,7 @@ const Footer = () => {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-500 to-purple-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 group"
+          className="fixed bottom-8 right-8 bg-black border border-gray-700 text-white p-3 rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl transition-all duration-300 z-50 group"
           aria-label="Scroll to top"
         >
           <FiArrowUp className="h-5 w-5 group-hover:-translate-y-1 transition-transform" />
