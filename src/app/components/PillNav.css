@@ -9,7 +9,7 @@
   border-radius: 9999px;
   padding: 0.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 768px) {
@@ -181,17 +181,17 @@
   width: var(--nav-h);
   height: var(--nav-h);
   border-radius: 50%;
-  background: var(--base, #000);
+  background: #1a1a1a;
   border: none;
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   padding: 0;
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 @media (max-width: 768px) {
@@ -201,51 +201,55 @@
 }
 
 .hamburger-line {
-  width: 16px;
+  width: 18px;
   height: 2px;
-  background: var(--pill-bg, #fff);
-  border-radius: 1px;
+  background: #ffffff;
+  border-radius: 2px;
   transition: all 0.01s ease;
   transform-origin: center;
+  display: block;
 }
 
 .mobile-menu-popover {
-  position: absolute;
-  top: 3em;
+  position: fixed;
+  top: 5rem;
   left: 1rem;
   right: 1rem;
-  background: var(--base, #f0f0f0);
-  border-radius: 27px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 998;
   opacity: 0;
   transform-origin: top center;
   visibility: hidden;
+  overflow: hidden;
 }
 
 .mobile-menu-list {
   list-style: none;
   margin: 0;
-  padding: 3px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 
 .mobile-menu-popover .mobile-menu-link {
   display: block;
-  padding: 12px 16px;
-  color: var(--pill-text, #fff);
-  background-color: var(--pill-bg, #fff);
+  padding: 14px 20px;
+  color: #1a1a1a;
+  background-color: transparent;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 500;
-  border-radius: 50px;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+  letter-spacing: 0.3px;
 }
 
-.mobile-menu-popover .mobile-menu-link:hover {
-  cursor: pointer;
-  background-color: var(--base);
-  color: var(--hover-text, #fff);
+.mobile-menu-popover .mobile-menu-link:hover,
+.mobile-menu-popover .mobile-menu-link.is-active {
+  background-color: #1a1a1a;
+  color: #ffffff;
 }

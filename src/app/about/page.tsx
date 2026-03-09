@@ -27,32 +27,9 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from "react-icons/si";
-import FlowingMenu from "../components/FlowingMenu";
 import ProfileCard from "../components/ProfileCard";
 
 const About = () => {
-  const timelineItems = [
-    {
-      link: "#",
-      text: "2025 - It specializes - Ai/Ml & Full-Stack Development",
-      image:
-        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop",
-    },
-    {
-      link: "#",
-      text: "2024 - System Administrator & Web Handler",
-      image:
-        "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?w=600&h=400&fit=crop",
-    },
-
-    {
-      link: "#",
-      text: "2020 - 2024  : Bachelor Degree in Computer Science",
-      image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=600&h=400&fit=crop",
-    },
-  ];
-
   const timelineData = [
     {
       year: "2025",
@@ -72,7 +49,6 @@ const About = () => {
         "Built and maintained Web applications, focusing on performance optimization and user experience.",
       skills: ["Vue.js", "Python", "MongoDB", "Docker"],
     },
-
     {
       year: "2020",
       title: "2020 - 2024  : Bachelor Degree in Computer Science",
@@ -196,7 +172,7 @@ const About = () => {
                 handle="chandan25sharma"
                 status="Available for work"
                 contactText="Get In Touch"
-                avatarUrl="https://i.postimg.cc/tCqwvn7V/Chat-GPT-Image-Aug-3-2025-05-53-07-PM.png"
+                avatarUrl="/images/profile.jpg"
                 showUserInfo={true}
                 enableTilt={true}
                 enableMobileTilt={false}
@@ -250,54 +226,48 @@ const About = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-black mb-4">My Journey</h2>
             <p className="text-lg text-black">
-              From student to professional developer - hover to explore each
-              milestone
+              From student to professional developer
             </p>
           </div>
 
-          <div
-            className="max-w-7xl mx-auto"
-            style={{
-              height: "600px",
-              position: "relative",
-              zIndex: 1,
-              overflow: "hidden",
-            }}
-          >
-            <FlowingMenu items={timelineItems} />
-          </div>
+          {/* Always-visible Timeline */}
+          <div className="max-w-3xl mx-auto relative">
+            {/* vertical line */}
+            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200" />
 
-          {/* Timeline Details Cards */}
-          <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto relative z-20">
             {timelineData.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 border border-gray-300 relative z-20"
-              >
-                <div className="flex items-center space-x-2 mb-3">
-                  {item.type === "work" ? (
-                    <FiBriefcase className="h-5 w-5 text-black" />
-                  ) : (
-                    <FiBook className="h-5 w-5 text-black" />
-                  )}
-                  <span className="text-sm font-semibold text-black">
-                    {item.year}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-black mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-black font-medium mb-3">{item.company}</p>
-                <p className="text-black text-sm mb-4">{item.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {item.skills.map((skill, skillIndex) => (
-                    <span
-                      key={skillIndex}
-                      className="px-2 py-1 bg-gray-100 text-black rounded text-xs border border-gray-300"
-                    >
-                      {skill}
+              <div key={index} className="relative pl-16 pb-10 last:pb-0">
+                {/* dot */}
+                <div className="absolute left-4 top-1 w-5 h-5 rounded-full bg-black border-4 border-white shadow" />
+
+                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    {item.type === "work" ? (
+                      <FiBriefcase className="h-4 w-4 text-black flex-shrink-0" />
+                    ) : (
+                      <FiBook className="h-4 w-4 text-black flex-shrink-0" />
+                    )}
+                    <span className="text-sm font-semibold text-black">
+                      {item.year}
                     </span>
-                  ))}
+                    <span className="text-xs text-gray-500 ml-auto">
+                      {item.company}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-black mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-700 text-sm mb-3">{item.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.skills.map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="px-2 py-1 bg-gray-100 text-black rounded text-xs border border-gray-200"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}

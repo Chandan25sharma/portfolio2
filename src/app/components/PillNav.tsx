@@ -54,6 +54,29 @@ const PillNav: React.FC<PillNavProps> = ({
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navItemsRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when tapping outside
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      if (
+        isMobileMenuOpen &&
+        containerRef.current &&
+        !containerRef.current.contains(target) &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(target)
+      ) {
+        closeMobileMenu();
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const layout = () => {
@@ -195,6 +218,27 @@ const PillNav: React.FC<PillNavProps> = ({
     });
   };
 
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    const hamburger = hamburgerRef.current;
+    const menu = mobileMenuRef.current;
+    if (hamburger) {
+      const lines = hamburger.querySelectorAll(".hamburger-line");
+      gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
+      gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
+    }
+    if (menu) {
+      gsap.to(menu, {
+        opacity: 0,
+        y: 10,
+        duration: 0.2,
+        ease,
+        transformOrigin: "top center",
+        onComplete: () => { gsap.set(menu, { visibility: "hidden" }); },
+      });
+    }
+  };
+
   const toggleMobileMenu = () => {
     const newState = !isMobileMenuOpen;
     setIsMobileMenuOpen(newState);
@@ -232,13 +276,10 @@ const PillNav: React.FC<PillNavProps> = ({
         gsap.to(menu, {
           opacity: 0,
           y: 10,
-          scaleY: 1,
           duration: 0.2,
           ease,
           transformOrigin: "top center",
-          onComplete: () => {
-            gsap.set(menu, { visibility: "hidden" });
-          },
+          onComplete: () => { gsap.set(menu, { visibility: "hidden" }); },
         });
       }
     }
@@ -254,7 +295,7 @@ const PillNav: React.FC<PillNavProps> = ({
   } as React.CSSProperties;
 
   return (
-    <div className="pill-nav-container">
+    <div className="pill-nav-container" ref={containerRef}>
       <nav
         className={`pill-nav ${className}`}
         aria-label="Primary"
