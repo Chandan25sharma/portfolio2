@@ -303,7 +303,7 @@ const PillNav: React.FC<PillNavProps> = ({
       >
         <Link
           className="pill-logo"
-          href="/logo.png"
+          href="/"
           aria-label="Home"
           onMouseEnter={handleLogoEnter}
           ref={logoRef}
