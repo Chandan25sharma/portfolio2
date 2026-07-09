@@ -1,12 +1,25 @@
 ﻿"use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useGSAP } from "@gsap/react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import {
+  SiDocker,
+  SiGraphql,
+  SiJavascript,
+  SiMongodb,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+} from "react-icons/si";
 import {
   TbArrowDown,
   TbBrandAzure,
@@ -21,19 +34,6 @@ import {
   TbTerminal2,
   TbTool,
 } from "react-icons/tb";
-import {
-  SiDocker,
-  SiGraphql,
-  SiJavascript,
-  SiMongodb,
-  SiNextdotjs,
-  SiNodedotjs,
-  SiPostgresql,
-  SiPython,
-  SiReact,
-  SiTailwindcss,
-  SiTypescript,
-} from "react-icons/si";
 import LogoLoop from "./components/LogoLoop";
 
 const techLogos = [
@@ -296,6 +296,18 @@ const spiralRings = [
   { r: 348, size: 12.5, duration: 111 },
   { r: 376, size: 13, duration: 118 },
   { r: 404, size: 13.5, duration: 125 },
+
+  // Added rings 👇
+  { r: 432, size: 14, duration: 132 },
+  { r: 460, size: 14.5, duration: 139 },
+  { r: 488, size: 15, duration: 146 },
+  { r: 516, size: 15.5, duration: 153 },
+  { r: 544, size: 16, duration: 160 },
+  { r: 572, size: 16.5, duration: 167 },
+  { r: 600, size: 17, duration: 174 },
+  { r: 628, size: 17.5, duration: 181 },
+  { r: 656, size: 18, duration: 188 },
+  { r: 684, size: 18.5, duration: 195 },
 ];
 
 function SpiralRings({ phrases, className }: { phrases: string[]; className?: string }) {
@@ -552,7 +564,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT — dark panel with spinning text rings */}
-          <div className="relative bg-bg overflow-hidden h-[60vh] md:h-auto">
+          <div className="relative bg-bg overflow-hidden hidden md:block">
             <div className="noise" />
             <div className="glitch-screen absolute inset-0 flex items-center justify-center">
               <SpiralRings
