@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
@@ -167,6 +167,41 @@ const testimonials = [
   },
 ];
 
+const friction = [
+  "Auth wired up, but no real role-based access control.",
+  "A dashboard that looks finished — the data behind it is hardcoded.",
+  "An ERP integration that syncs, until the schema changes without warning.",
+  "A chatbot demo with no memory, no fallback, no monitoring.",
+  "Automation scripts that run once, then quietly rot untouched.",
+];
+
+const faqs = [
+  {
+    q: "What do you actually build?",
+    a: "Production systems, not prototypes: AI agents, e-commerce platforms, internal tools, and ERP / Dynamics 365 integrations that stay running after the demo.",
+  },
+  {
+    q: "What's your stack?",
+    a: "Python, TypeScript, React/Next.js, Node.js, Oracle SQL/PostgreSQL, Azure. Picked per problem, not out of habit.",
+  },
+  {
+    q: "Do you take freelance or contract work?",
+    a: "Yes — alongside my full-time role, scoped by project.",
+  },
+  {
+    q: "How fast can you start?",
+    a: "Usually within a week, depending on scope and current workload.",
+  },
+  {
+    q: "Do you work directly with non-technical founders?",
+    a: "Yes. I translate business requirements into architecture without burying you in jargon.",
+  },
+  {
+    q: "What's the best way to reach you?",
+    a: "Email is fastest — mrchandansharma25@gmail.com.",
+  },
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
@@ -182,42 +217,49 @@ function Eyebrow({ index, label }: { index: string; label: string }) {
   );
 }
 
-export default function Home() {
-  const workListRef = useRef<HTMLDivElement>(null);
+function Reveal({
+  children,
+  from = "left",
+  className,
+}: {
+  children: React.ReactNode;
+  from?: "left" | "right";
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    const el = ref.current;
+    if (!el) return;
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>(".work-card").forEach((card) => {
-        gsap.fromTo(
-          card,
-          {
-            autoAlpha: 0,
-            y: 120,
-            rotateX: 35,
-            scale: 0.85,
-            transformPerspective: 1200,
-            transformOrigin: "50% 100%",
+      gsap.fromTo(
+        el,
+        { x: from === "left" ? -70 : 70, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            toggleActions: "play none none reverse",
           },
-          {
-            autoAlpha: 1,
-            y: 0,
-            rotateX: 0,
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              end: "top 38%",
-              scrub: 0.6,
-            },
-          }
-        );
-      });
-    }, workListRef);
+        }
+      );
+    }, ref);
     return () => ctx.revert();
-  }, []);
+  }, [from]);
 
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+}
+
+export default function Home() {
   return (
     <div className="bg-bg text-fg overflow-x-hidden">
       {/* HERO */}
@@ -346,16 +388,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WORK */}
-      <section id="work" className="py-24 md:py-32 border-b border-line bg-bg-soft">
+      {/* FRICTION */}
+      <section className="py-24 md:py-32 border-b border-line bg-bg-soft">
         <div className="container mx-auto px-6 md:px-10">
-          <Eyebrow index="02" label="Selected work" />
+          <Eyebrow index="02" label="The gap" />
+          <h2 className="font-display text-3xl md:text-5xl max-w-2xl mb-14 md:mb-16 leading-[1.1]">
+            A demo isn&apos;t a product. Most builds stall right there.
+          </h2>
+          <div className="max-w-2xl border-t border-line">
+            {friction.map((line) => (
+              <motion.div
+                key={line}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.6 }}
+                className="border-b border-line py-5 flex items-start gap-4"
+              >
+                <span className="text-accent font-mono text-sm mt-0.5">×</span>
+                <p className="text-fg-dim leading-relaxed">{line}</p>
+              </motion.div>
+            ))}
+          </div>
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.6 }}
+            className="font-display text-xl md:text-2xl mt-10 max-w-xl"
+          >
+            None of that ships. All of it is what I actually build.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* WORK */}
+      <section id="work" className="py-24 md:py-32 border-b border-line">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="03" label="Selected work" />
           <motion.h2
             variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.6 }}
-            className="font-display text-3xl md:text-5xl max-w-2xl mb-16 md:mb-24 flex flex-wrap"
+            className="font-display text-3xl md:text-5xl max-w-2xl mb-16 md:mb-20 flex flex-wrap"
           >
             {"Domains I've shipped in.".split(" ").map((word, i) => (
               <span key={i} className="overflow-hidden mr-[0.28em] pb-1">
@@ -372,64 +448,25 @@ export default function Home() {
             ))}
           </motion.h2>
 
-          <div ref={workListRef} className="space-y-20 md:space-y-32" style={{ perspective: "1200px" }}>
-            {work.map((item, i) => {
-              const Icon = item.icon;
-              const reversed = i % 2 === 1;
-              return (
-                <div
-                  key={item.tag}
-                  className={`work-card grid md:grid-cols-2 gap-8 md:gap-16 items-center will-change-transform ${
-                    reversed ? "md:[&>*:first-child]:order-2" : ""
-                  }`}
-                >
-                  <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden border border-line bg-bg-card">
-                    <div
-                      className="absolute inset-0 opacity-[0.08]"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(45deg, var(--fg) 1px, transparent 1px), linear-gradient(-45deg, var(--fg) 1px, transparent 1px)",
-                        backgroundSize: "28px 28px",
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,var(--accent-dim),transparent_60%)] opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
-                    <Icon
-                      className="drift-icon absolute -right-8 -bottom-8 w-52 h-52 text-fg opacity-[0.07] group-hover:opacity-[0.12] transition-opacity duration-700"
-                      strokeWidth={0.5}
-                    />
-                    <div className="relative h-full flex items-center justify-center">
-                      <Icon
-                        className="w-14 h-14 text-accent group-hover:scale-110 transition-transform duration-500"
-                        strokeWidth={1.2}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="w-11 h-11 rounded-full bg-accent-dim flex items-center justify-center mb-5">
-                      <Icon className="w-5 h-5 text-accent" strokeWidth={1.5} />
-                    </div>
-                    <span className="font-mono text-xs text-fg-dim">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="font-display text-2xl md:text-3xl mt-1 mb-4">
-                      {item.tag}
-                    </h3>
-                    <p className="text-fg-dim leading-relaxed max-w-md">{item.desc}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {item.stack.map((s) => (
-                        <span
-                          key={s}
-                          className="px-3 py-1 border border-line rounded-full font-mono text-xs text-fg-dim"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="border-t border-line">
+            {work.map((item, i) => (
+              <motion.div
+                key={item.tag}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                className="group border-b border-line py-6 md:py-7 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-10"
+              >
+                <span className="font-mono text-xs text-fg-dim w-8 shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-display text-xl md:text-2xl w-full md:w-72 shrink-0 group-hover:text-accent transition-colors">
+                  {item.tag}
+                </h3>
+                <p className="text-fg-dim leading-relaxed max-w-lg">{item.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -437,7 +474,7 @@ export default function Home() {
       {/* TOOLBOX */}
       <section className="py-20 md:py-28 border-b border-line overflow-hidden">
         <div className="container mx-auto px-6 md:px-10">
-          <Eyebrow index="03" label="Toolbox" />
+          <Eyebrow index="04" label="Toolbox" />
         </div>
         <div className="relative h-20">
           <LogoLoop
@@ -457,7 +494,7 @@ export default function Home() {
       {/* JOURNEY */}
       <section className="py-24 md:py-32 border-b border-line">
         <div className="container mx-auto px-6 md:px-10">
-          <Eyebrow index="04" label="Journey" />
+          <Eyebrow index="05" label="Journey" />
           <div className="max-w-3xl">
             {timeline.map((item) => (
               <motion.div
@@ -510,7 +547,7 @@ export default function Home() {
       {/* TESTIMONIALS */}
       <section className="py-24 md:py-32 border-b border-line bg-bg-soft">
         <div className="container mx-auto px-6 md:px-10">
-          <Eyebrow index="05" label="What people say" />
+          <Eyebrow index="06" label="What people say" />
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
               <motion.div
@@ -530,10 +567,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-24 md:py-32 border-b border-line">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="07" label="Before you reach out" />
+          <div className="max-w-2xl border-t border-line">
+            {faqs.map((item) => (
+              <details key={item.q} className="group border-b border-line py-5">
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none font-display text-lg md:text-xl">
+                  {item.q}
+                  <span className="font-mono text-fg-dim text-xl shrink-0 transition-transform group-open:rotate-45">
+                    +
+                  </span>
+                </summary>
+                <p className="text-fg-dim leading-relaxed mt-3 max-w-lg">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CONTACT / FOOTER */}
       <section id="contact" className="py-24 md:py-32">
         <div className="container mx-auto px-6 md:px-10">
-          <Eyebrow index="06" label="Let's build something" />
+          <Eyebrow index="08" label="Let's build something" />
           <h2 className="font-display text-4xl md:text-7xl max-w-3xl leading-[1.05]">
             Got a system worth automating?
           </h2>
@@ -572,7 +629,7 @@ export default function Home() {
           </div>
 
           <div className="mt-24 pt-8 border-t border-line flex flex-col sm:flex-row justify-between gap-4 text-xs text-fg-dim font-mono">
-            <span>© {new Date().getFullYear()} Chandan Sharma</span>
+            <span>Â© {new Date().getFullYear()} Chandan Sharma</span>
             <span className="flex items-center gap-2">
               <TbBuildingSkyscraper className="w-3.5 h-3.5" />
               <TbDatabase className="w-3.5 h-3.5" />

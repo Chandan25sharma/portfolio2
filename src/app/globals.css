@@ -19,7 +19,7 @@
   --color-fg-dim: var(--fg-dim);
   --color-line: var(--line);
   --color-accent: var(--accent);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-bricolage);
   --font-mono: var(--font-mono-plex);
   --font-sans: var(--font-manrope);
 }
@@ -91,6 +91,24 @@ body {
 
 .drift-icon {
   animation: drift 7s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: translateZ(24px) rotate(360deg);
+  }
+}
+@keyframes spin-slow-reverse {
+  to {
+    transform: translateZ(8px) rotate(-360deg);
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 9s linear infinite;
+}
+.spin-slow-reverse {
+  animation: spin-slow-reverse 13s linear infinite;
 }
 
 .noise {

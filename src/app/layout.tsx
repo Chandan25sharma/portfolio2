@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Manrope } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  axes: ["opsz", "SOFT", "WONK"],
 });
 
 const plexMono = IBM_Plex_Mono({
@@ -33,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fraunces.variable} ${plexMono.variable} ${manrope.variable} antialiased bg-bg text-fg`}
+        className={`${bricolage.variable} ${plexMono.variable} ${manrope.variable} antialiased bg-bg text-fg`}
       >
         {children}
       </body>
