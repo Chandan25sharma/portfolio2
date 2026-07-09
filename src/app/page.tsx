@@ -362,6 +362,83 @@ function GlitchBlock({ phrases, className }: { phrases: string[]; className?: st
   );
 }
 
+const ASCII_RAMP = " .:-=+*#%@";
+
+// Signed-distance helpers for building recognisable shapes out of primitives.
+function sdSegment(px: number, py: number, ax: number, ay: number, bx: number, by: number, r: number) {
+  const pax = px - ax;
+  const pay = py - ay;
+  const bax = bx - ax;
+  const bay = by - ay;
+  const h = Math.max(0, Math.min(1, (pax * bax + pay * bay) / (bax * bax + bay * bay)));
+  const dx = pax - bax * h;
+  const dy = pay - bay * h;
+  return Math.sqrt(dx * dx + dy * dy) - r;
+}
+
+function sdCircle(px: number, py: number, cx: number, cy: number, r: number) {
+  return Math.hypot(px - cx, py - cy) - r;
+}
+
+// A rabbit face (round head + two ears), built from primitives rather than
+// an actual photo — no image asset available.
+function rabbitSdf(px: number, py: number) {
+  const head = sdCircle(px, py, 0, -0.15, 0.32);
+  const earL = sdSegment(px, py, -0.16, 0.08, -0.22, 0.78, 0.09);
+  const earR = sdSegment(px, py, 0.16, 0.08, 0.22, 0.78, 0.09);
+  return Math.min(head, Math.min(earL, earR));
+}
+
+function rabbitFeatures(px: number, py: number) {
+  const eyeL = sdCircle(px, py, -0.11, -0.18, 0.045);
+  const eyeR = sdCircle(px, py, 0.11, -0.18, 0.045);
+  const nose = sdCircle(px, py, 0, -0.32, 0.035);
+  return Math.min(eyeL, Math.min(eyeR, nose));
+}
+
+function buildAsciiArt(cols: number, rows: number, seed: number) {
+  const rand = seededRandom(seed);
+  const lines: string[] = [];
+  for (let y = 0; y < rows; y++) {
+    let line = "";
+    for (let x = 0; x < cols; x++) {
+      const px = ((x / cols) * 2 - 1) * 0.55;
+      const py = 1 - (y / rows) * 2;
+      const d = rabbitSdf(px, py);
+      const f = rabbitFeatures(px, py);
+
+      let ch = " ";
+      if (f < 0) {
+        ch = ASCII_RAMP[ASCII_RAMP.length - 1];
+      } else if (d < 0) {
+        const depth = Math.min(1, -d / 0.16);
+        const hatch = Math.sin((px + py) * 45) * 0.18;
+        const noise = rand() * 0.25;
+        const v = Math.max(0, Math.min(1, depth * 0.65 + hatch + noise + 0.2));
+        ch = ASCII_RAMP[Math.floor(v * (ASCII_RAMP.length - 1))];
+      } else if (d < 0.025) {
+        ch = ASCII_RAMP[3];
+      }
+      line += ch;
+    }
+    lines.push(line);
+  }
+  return lines.join("\n");
+}
+
+function AsciiArt({ seed = 101, className }: { seed?: number; className?: string }) {
+  const art = buildAsciiArt(56, 34, seed);
+  return (
+    <pre
+      aria-hidden="true"
+      className={`font-mono whitespace-pre select-none ${className ?? ""}`}
+      style={{ fontSize: "0.85vw", lineHeight: "0.85vw" }}
+    >
+      {art}
+    </pre>
+  );
+}
+
 export default function Home() {
   return (
     <div className="bg-bg text-fg overflow-x-hidden">
@@ -491,8 +568,12 @@ export default function Home() {
       </section>
 
       {/* FRICTION */}
-      <section className="py-24 md:py-32 border-b border-line bg-bg-soft">
-        <div className="container mx-auto px-6 md:px-10">
+      <section className="relative py-24 md:py-32 border-b border-line bg-bg-soft overflow-hidden">
+        <AsciiArt
+          seed={101}
+          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-[55%] text-fg-dim opacity-[0.3] hidden lg:block"
+        />
+        <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="02" label="The gap" />
           <h2 className="font-display text-3xl md:text-5xl max-w-2xl mb-14 md:mb-16 leading-[1.1]">
             A demo isn&apos;t a product. Most builds stall right there.
@@ -659,8 +740,12 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="py-24 md:py-32 border-b border-line">
-        <div className="container mx-auto px-6 md:px-10">
+      <section className="relative py-24 md:py-32 border-b border-line overflow-hidden">
+        <GlitchBlock
+          phrases={["FAQ", "BEFORE YOU REACH OUT", "NO SURPRISES", "READ FIRST", "SCOPED BY PROJECT"]}
+          className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.14] select-none"
+        />
+        <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="07" label="Before you reach out" />
           <div className="max-w-2xl border-t border-line">
             {faqs.map((item, i) => (
