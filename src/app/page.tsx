@@ -282,11 +282,20 @@ function glitchify(text: string, rand: () => number, density = 0.07) {
 }
 
 const spiralRings = [
-  { r: 70, size: 10, duration: 45 },
-  { r: 120, size: 11, duration: 60 },
-  { r: 175, size: 12, duration: 75 },
-  { r: 235, size: 13, duration: 95 },
-  { r: 300, size: 14, duration: 115 },
+  { r: 40, size: 7, duration: 34 },
+  { r: 68, size: 7.5, duration: 41 },
+  { r: 96, size: 8, duration: 48 },
+  { r: 124, size: 8.5, duration: 55 },
+  { r: 152, size: 9, duration: 62 },
+  { r: 180, size: 9.5, duration: 69 },
+  { r: 208, size: 10, duration: 76 },
+  { r: 236, size: 10.5, duration: 83 },
+  { r: 264, size: 11, duration: 90 },
+  { r: 292, size: 11.5, duration: 97 },
+  { r: 320, size: 12, duration: 104 },
+  { r: 348, size: 12.5, duration: 111 },
+  { r: 376, size: 13, duration: 118 },
+  { r: 404, size: 13.5, duration: 125 },
 ];
 
 function SpiralRings({ phrases, className }: { phrases: string[]; className?: string }) {
@@ -304,7 +313,7 @@ function SpiralRings({ phrases, className }: { phrases: string[]; className?: st
   }, []);
 
   return (
-    <svg viewBox="-320 -320 640 640" className={className} aria-hidden="true">
+    <svg viewBox="-420 -420 840 840" className={className} aria-hidden="true">
       {spiralRings.map((ring, i) => (
         <g
           key={ring.r}
@@ -320,7 +329,7 @@ function SpiralRings({ phrases, className }: { phrases: string[]; className?: st
           <text
             fontSize={ring.size}
             fill="currentColor"
-            opacity={0.5 - i * 0.07}
+            opacity={Math.max(0.12, 0.55 - i * 0.035)}
             className="font-mono uppercase"
             style={{ letterSpacing: "0.15em" }}
           >
@@ -543,7 +552,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT — dark panel with spinning text rings */}
-          <div className="relative bg-bg overflow-hidden hidden md:block">
+          <div className="relative bg-bg overflow-hidden h-[60vh] md:h-auto">
             <div className="noise" />
             <div className="glitch-screen absolute inset-0 flex items-center justify-center">
               <SpiralRings
