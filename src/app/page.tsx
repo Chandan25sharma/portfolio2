@@ -1,15 +1,32 @@
 "use client";
 
-import Link from "next/link";
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  SiCodepen,
+  TbArrowDown,
+  TbArrowUpRight,
+  TbBrandAzure,
+  TbBrandGithub,
+  TbBrandLinkedin,
+  TbBrandX,
+  TbBuildingSkyscraper,
+  TbBuildingWarehouse,
+  TbChartDots,
+  TbCloudComputing,
+  TbDatabase,
+  TbMail,
+  TbRobot,
+  TbShoppingCart,
+  TbTerminal2,
+  TbTool,
+} from "react-icons/tb";
+import {
   SiDocker,
-  SiG2,
-  SiGit,
-  SiGithub,
   SiGraphql,
   SiJavascript,
-  SiLinkedin,
   SiMongodb,
   SiNextdotjs,
   SiNodedotjs,
@@ -18,585 +35,549 @@ import {
   SiReact,
   SiTailwindcss,
   SiTypescript,
-  SiX,
 } from "react-icons/si";
+import MetaBalls from "./components/MetaBalls";
 import LogoLoop from "./components/LogoLoop";
 
 const techLogos = [
+  { node: <SiReact className="text-fg" />, title: "React" },
+  { node: <SiNextdotjs className="text-fg" />, title: "Next.js" },
+  { node: <SiTypescript className="text-fg" />, title: "TypeScript" },
+  { node: <SiTailwindcss className="text-fg" />, title: "Tailwind CSS" },
+  { node: <SiNodedotjs className="text-fg" />, title: "Node.js" },
+  { node: <SiPython className="text-fg" />, title: "Python" },
+  { node: <SiPostgresql className="text-fg" />, title: "PostgreSQL" },
+  { node: <SiJavascript className="text-fg" />, title: "JavaScript" },
+  { node: <SiDocker className="text-fg" />, title: "Docker" },
+  { node: <SiMongodb className="text-fg" />, title: "MongoDB" },
+  { node: <SiGraphql className="text-fg" />, title: "GraphQL" },
+];
+
+const work = [
   {
-    node: <SiReact className="text-blue-500" />,
-    title: "React",
-    href: "https://react.dev",
+    tag: "AI Agents & Automation",
+    icon: TbRobot,
+    desc: "Autonomous agents and LLM-driven workflows that handle sales, support and research tasks without a human in the loop.",
+    stack: ["Python", "LangChain", "OpenAI", "Vector DBs"],
   },
   {
-    node: <SiNextdotjs className="text-black" />,
-    title: "Next.js",
-    href: "https://nextjs.org",
+    tag: "E-Commerce Platforms",
+    icon: TbShoppingCart,
+    desc: "Storefronts and checkout flows built for conversion — catalog, cart, payments and order management end to end.",
+    stack: ["Next.js", "Stripe", "PostgreSQL", "Redis"],
   },
   {
-    node: <SiTypescript className="text-blue-600" />,
-    title: "TypeScript",
-    href: "https://www.typescriptlang.org",
+    tag: "Internal Business Tools",
+    icon: TbTool,
+    desc: "Dashboards and admin panels that replace spreadsheets — built fast, built for the team that actually uses them daily.",
+    stack: ["React", "Node.js", "REST APIs"],
   },
   {
-    node: <SiTailwindcss className="text-cyan-500" />,
-    title: "Tailwind CSS",
-    href: "https://tailwindcss.com",
+    tag: "Python Automation & Scripting",
+    icon: TbTerminal2,
+    desc: "Scripts and services that remove repetitive manual work — scraping, reporting, forecasting and data cleanup on schedule.",
+    stack: ["Python", "Pandas", "Cron", "APIs"],
   },
   {
-    node: <SiNodedotjs className="text-green-600" />,
-    title: "Node.js",
-    href: "https://nodejs.org",
+    tag: "Microsoft Dynamics 365",
+    icon: TbBrandAzure,
+    desc: "CRM and business-process customisation on D365 — entities, plugins and Power Automate flows tailored to sales operations.",
+    stack: ["Dynamics 365", "Power Automate", "Azure"],
   },
   {
-    node: <SiPython className="text-blue-500" />,
-    title: "Python",
-    href: "https://python.org",
+    tag: "ERP Systems Integration",
+    icon: TbBuildingWarehouse,
+    desc: "Connecting inventory, finance and operations systems so data moves in one direction — no more manual reconciliation.",
+    stack: ["Oracle SQL", "REST", "SSIS"],
   },
   {
-    node: <SiPostgresql className="text-blue-700" />,
-    title: "PostgreSQL",
-    href: "https://postgresql.org",
+    tag: "Cloud & DevOps Infrastructure",
+    icon: TbCloudComputing,
+    desc: "Containerised deployments, CI pipelines and monitoring — infrastructure that stays up and ships without drama.",
+    stack: ["Docker", "GitHub Actions", "Azure"],
   },
   {
-    node: <SiJavascript className="text-yellow-500" />,
-    title: "JavaScript",
-    href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-  },
-  {
-    node: <SiGit className="text-orange-600" />,
-    title: "Git",
-    href: "https://git-scm.com",
-  },
-  {
-    node: <SiDocker className="text-blue-500" />,
-    title: "Docker",
-    href: "https://docker.com",
-  },
-  {
-    node: <SiMongodb className="text-green-500" />,
-    title: "MongoDB",
-    href: "https://mongodb.com",
-  },
-  {
-    node: <SiGraphql className="text-pink-500" />,
-    title: "GraphQL",
-    href: "https://graphql.org",
+    tag: "Data Pipelines & Analytics",
+    icon: TbChartDots,
+    desc: "Pipelines that turn raw operational data into dashboards leadership actually reads before making a decision.",
+    stack: ["Python", "SQL", "Power BI"],
   },
 ];
 
-export default function Home() {
+const timeline = [
+  {
+    period: "2025 — Present",
+    tag: "Current",
+    title: "IT Specialist — AI/ML & Full-Stack",
+    org: "Al-Mahroos Sons & Co.",
+    desc: "Leading development of scalable AI tools to automate the sales process. Building web applications with React, Node.js and Oracle SQL.",
+    stack: ["Python", "React", "Node.js", "Oracle SQL"],
+  },
+  {
+    period: "2024",
+    tag: "",
+    title: "System Administrator & Web Handler",
+    org: "RJE Technology Pvt. Ltd.",
+    desc: "Managed web infrastructure and maintained applications with a focus on performance, uptime and user experience.",
+    stack: ["Vue.js", "Python", "MongoDB", "Docker"],
+  },
+  {
+    period: "Jan 2024 — Jul 2024",
+    tag: "Internship",
+    title: "Software Development Intern",
+    org: "Fuzion 5 Technology",
+    desc: "Full-stack web development — front-end UI design and back-end API integrations over a 7-month internship.",
+    stack: ["React", "Node.js", "JavaScript", "REST APIs"],
+  },
+  {
+    period: "2020 — 2024",
+    tag: "Graduated",
+    title: "B.Tech — Computer Science Engineering",
+    org: "JNTU-Kakinada",
+    desc: "Focus on Machine Learning, Data Science and Software Development.",
+    stack: ["Python", "ML", "Data Science", "Java"],
+  },
+];
+
+const stats = [
+  { value: "3+", label: "Years experience" },
+  { value: "25+", label: "Projects shipped" },
+  { value: "100+", label: "Repositories" },
+  { value: "8", label: "Domains covered" },
+];
+
+const testimonials = [
+  {
+    name: "Karuchola Lakshmi Sasidhar",
+    role: "Cloud & DevOps, F5 Technology Pvt. Ltd",
+    quote:
+      "Exceptional problem-solving skills and attention to detail. Delivered our project ahead of schedule with outstanding quality.",
+  },
+  {
+    name: "Dhruba Adhikari",
+    role: "CTO, Khalti Pvt. Ltd",
+    quote:
+      "Great communication and technical expertise. The web app performance improved by 40% after optimization.",
+  },
+  {
+    name: "Ram Sharma",
+    role: "RJE Technology Pvt. Ltd",
+    quote:
+      "Innovative solutions and clean code architecture. A valuable team player with excellent collaboration skills.",
+  },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
+};
+
+function Eyebrow({ index, label }: { index: string; label: string }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Hero Section */}
-      <section className="container mx-auto px-6 pt-20 pb-10 md:py-20">
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh] md:min-h-[80vh]">
-          <div className="space-y-5 text-center md:text-left">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Hello, I&apos;m
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-blue-600">
-                Chandan Sharma
+    <div className="flex items-center gap-3 mb-6">
+      <span className="font-mono text-xs text-accent tracking-widest">{index}</span>
+      <span className="h-px w-10 bg-line" />
+      <span className="font-mono text-xs text-fg-dim uppercase tracking-[0.2em]">{label}</span>
+    </div>
+  );
+}
+
+export default function Home() {
+  const workListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>(".work-card").forEach((card) => {
+        gsap.fromTo(
+          card,
+          {
+            autoAlpha: 0,
+            y: 120,
+            rotateX: 35,
+            scale: 0.85,
+            transformPerspective: 1200,
+            transformOrigin: "50% 100%",
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            rotateX: 0,
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 92%",
+              end: "top 38%",
+              scrub: 0.6,
+            },
+          }
+        );
+      });
+    }, workListRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div className="bg-bg text-fg overflow-x-hidden">
+      {/* HERO */}
+      <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-line">
+        <div className="absolute inset-0">
+          <MetaBalls
+            color="#d7ff3f"
+            cursorBallColor="#f3f1ea"
+            cursorBallSize={2.4}
+            ballCount={14}
+            animationSize={26}
+            enableMouseInteraction
+            enableTransparency
+            hoverSmoothness={0.12}
+            clumpFactor={1.1}
+            speed={0.25}
+          />
+        </div>
+        <div className="noise" />
+        <div className="relative z-10 container mx-auto px-6 md:px-10">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="font-mono text-xs md:text-sm text-accent tracking-[0.3em] uppercase mb-6"
+          >
+            Full-Stack &amp; AI Engineer
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="font-display text-[13vw] md:text-[7.5vw] leading-[0.95] tracking-tight max-w-5xl"
+          >
+            Chandan Sharma
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+            className="mt-6 max-w-xl text-base md:text-lg text-fg-dim leading-relaxed"
+          >
+            I build AI agents, e-commerce platforms, internal tools and
+            enterprise systems — turning messy business processes into
+            software people actually want to use.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-10 flex flex-wrap gap-4"
+          >
+            <a
+              href="#work"
+              className="px-7 py-3.5 bg-accent text-bg font-mono text-sm font-medium rounded-full hover:scale-[1.03] transition-transform"
+            >
+              See my work
+            </a>
+            <a
+              href="#contact"
+              className="px-7 py-3.5 border border-line text-fg font-mono text-sm rounded-full hover:border-accent hover:text-accent transition-colors"
+            >
+              Get in touch
+            </a>
+          </motion.div>
+        </div>
+        <a
+          href="#about"
+          aria-label="Scroll to content"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-fg-dim hover:text-accent transition-colors animate-bounce"
+        >
+          <TbArrowDown className="w-5 h-5" />
+        </a>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" className="py-24 md:py-32 border-b border-line">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="01" label="About" />
+          <div className="grid md:grid-cols-[1fr_1.3fr] gap-12 md:gap-16 items-start">
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+              className="relative w-40 h-40 md:w-56 md:h-56 rounded-2xl overflow-hidden border border-line"
+            >
+              <Image
+                src="/images/profile.jpg"
+                alt="Chandan Sharma"
+                fill
+                sizes="224px"
+                className="object-cover grayscale"
+              />
+            </motion.div>
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+            >
+              <p className="font-display text-2xl md:text-4xl leading-snug text-fg">
+                Three years turning ambiguous requirements into
+                <span className="text-accent"> production software</span> —
+                across ML, automation and enterprise systems.
+              </p>
+              <p className="mt-6 text-fg-dim leading-relaxed max-w-2xl">
+                I specialise in AI/ML and full-stack development with modern
+                Python and JavaScript. Recently I&apos;ve been building agents
+                that automate sales workflows, and before that a real-time
+                collaboration platform that held up under 100k+ concurrent
+                users.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-2">
+                {["Python", "TypeScript", "React", "Node.js", "Oracle SQL", "Azure"].map((s) => (
+                  <span
+                    key={s}
+                    className="px-3 py-1 border border-line rounded-full font-mono text-xs text-fg-dim"
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* WORK */}
+      <section id="work" className="py-24 md:py-32 border-b border-line bg-bg-soft">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="02" label="Selected work" />
+          <motion.h2
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.6 }}
+            className="font-display text-3xl md:text-5xl max-w-2xl mb-16 md:mb-24 flex flex-wrap"
+          >
+            {"Domains I've shipped in.".split(" ").map((word, i) => (
+              <span key={i} className="overflow-hidden mr-[0.28em] pb-1">
+                <motion.span
+                  variants={{
+                    hidden: { y: "110%" },
+                    show: { y: "0%", transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
+                  }}
+                  className={`inline-block ${i >= 2 ? "shine-text" : ""}`}
+                >
+                  {word}
+                </motion.span>
               </span>
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
-              Full-Stack Developer & AI/ML Engineer — building innovative,
-              scalable software experiences with modern technologies.
-            </p>
-            <div className="flex flex-row gap-3 justify-center md:justify-start">
-              <Link
-                href="/projects"
-                className="flex-1 sm:flex-none px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-center text-sm sm:text-base"
-              >
-                View My Work
-              </Link>
-              <Link
-                href="/contact"
-                className="flex-1 sm:flex-none px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition-all duration-300 text-center text-sm sm:text-base"
-              >
-                Get In Touch
-              </Link>
-            </div>
-          </div>
+            ))}
+          </motion.h2>
 
-          {/* Code mockup — hidden on mobile */}
-          <div className="hidden md:flex justify-center">
-            <div className="relative">
-              <div className="w-80 h-80 bg-gradient-to-r from-gray-900 to-gray-400 rounded-2xl shadow-2xl">
-                <div className="absolute inset-4 bg-gray-900 rounded-xl overflow-hidden">
-                  <div className="p-6 space-y-4">
-                    <div className="flex space-x-2">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+          <div ref={workListRef} className="space-y-20 md:space-y-32" style={{ perspective: "1200px" }}>
+            {work.map((item, i) => {
+              const Icon = item.icon;
+              const reversed = i % 2 === 1;
+              return (
+                <div
+                  key={item.tag}
+                  className={`work-card grid md:grid-cols-2 gap-8 md:gap-16 items-center will-change-transform ${
+                    reversed ? "md:[&>*:first-child]:order-2" : ""
+                  }`}
+                >
+                  <div className="group relative aspect-[4/3] rounded-2xl overflow-hidden border border-line bg-bg-card">
+                    <div
+                      className="absolute inset-0 opacity-[0.08]"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(45deg, var(--fg) 1px, transparent 1px), linear-gradient(-45deg, var(--fg) 1px, transparent 1px)",
+                        backgroundSize: "28px 28px",
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,var(--accent-dim),transparent_60%)] opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
+                    <Icon
+                      className="drift-icon absolute -right-8 -bottom-8 w-52 h-52 text-fg opacity-[0.07] group-hover:opacity-[0.12] transition-opacity duration-700"
+                      strokeWidth={0.5}
+                    />
+                    <div className="relative h-full flex items-center justify-center">
+                      <Icon
+                        className="w-14 h-14 text-accent group-hover:scale-110 transition-transform duration-500"
+                        strokeWidth={1.2}
+                      />
                     </div>
-                    <div className="space-y-3">
-                      <div className="h-4 bg-gradient-to-r from-cyan-400 to-blue-400 rounded animate-pulse"></div>
-                      <div className="h-4 bg-gradient-to-r from-purple-400 to-pink-400 rounded animate-pulse w-3/4"></div>
-                      <div className="h-4 bg-gradient-to-r from-green-400 to-blue-400 rounded animate-pulse w-1/2"></div>
-                      <div className="h-4 bg-gradient-to-r from-yellow-400 to-orange-400 rounded animate-pulse w-2/3"></div>
+                  </div>
+
+                  <div>
+                    <div className="w-11 h-11 rounded-full bg-accent-dim flex items-center justify-center mb-5">
+                      <Icon className="w-5 h-5 text-accent" strokeWidth={1.5} />
+                    </div>
+                    <span className="font-mono text-xs text-fg-dim">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-display text-2xl md:text-3xl mt-1 mb-4">
+                      {item.tag}
+                    </h3>
+                    <p className="text-fg-dim leading-relaxed max-w-md">{item.desc}</p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {item.stack.map((s) => (
+                        <span
+                          key={s}
+                          className="px-3 py-1 border border-line rounded-full font-mono text-xs text-fg-dim"
+                        >
+                          {s}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* About Snapshot Section */}
-      <section className="py-12 md:py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-            <div className="space-y-5">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">About Me</h2>
-              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                I&apos;m a passionate software developer with 3+ years of
-                experience building scalable web applications. I specialize in
-                ML, DL, AI &amp; full-stack development with modern Python &amp;
-                JavaScript frameworks.
-              </p>
-              <p className="text-base md:text-lg text-gray-600">
-                <strong>Standout Achievement:</strong> Built a real-time
-                collaboration platform handling 100k+ concurrent users.
-              </p>
-              <Link
-                href="/about"
-                className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-700 transition-all duration-300"
+      {/* TOOLBOX */}
+      <section className="py-20 md:py-28 border-b border-line overflow-hidden">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="03" label="Toolbox" />
+        </div>
+        <div className="relative h-20">
+          <LogoLoop
+            logos={techLogos}
+            speed={100}
+            direction="left"
+            logoHeight={40}
+            gap={56}
+            pauseOnHover
+            fadeOut
+            fadeOutColor="#0a0a0b"
+            ariaLabel="Technology stack"
+          />
+        </div>
+      </section>
+
+      {/* JOURNEY */}
+      <section className="py-24 md:py-32 border-b border-line">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="04" label="Journey" />
+          <div className="max-w-3xl">
+            {timeline.map((item) => (
+              <motion.div
+                key={item.title}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.4 }}
+                className="relative pl-8 pb-12 border-l border-line last:pb-0"
               >
-                Learn More About Me
-                <SiGithub className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
-            {/* Avatar hidden on mobile — saves space */}
-            <div className="hidden md:flex justify-center">
-              <div className="relative">
-                <div className="w-64 h-64 bg-gradient-to-r from-gray-800 to-blue-800 rounded-full shadow-2xl">
-                  <div className="absolute inset-4 bg-gray-100 rounded-full flex items-center justify-center">
-                    <span className="text-8xl">👨‍💻</span>
-                  </div>
+                <span className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent" />
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <span className="font-mono text-xs text-fg-dim uppercase tracking-wide">
+                    {item.period}
+                  </span>
+                  {item.tag && (
+                    <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-accent-dim text-accent uppercase">
+                      {item.tag}
+                    </span>
+                  )}
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Preview */}
-      <section className="bg-white py-16">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Technologies I Work With
-          </h2>
-          <div className="relative h-24">
-            <LogoLoop
-              logos={techLogos}
-              speed={120}
-              direction="left"
-              logoHeight={48}
-              gap={60}
-              pauseOnHover
-              scaleOnHover
-              fadeOut
-              fadeOutColor="#ffffff"
-              ariaLabel="Technology stack"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Experience & Education Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-black mb-4">
-              Experience & Education
-            </h2>
-            <p className="text-lg text-gray-600">
-              My academic background and professional journey
-            </p>
-          </div>
-
-          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
-
-            {/* Education Column */}
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0121 10.634V17a2 2 0 01-1.105 1.789l-6 3a2 2 0 01-1.79 0l-6-3A2 2 0 013 17v-6.366c0-.417.08-.83.234-1.213L12 14z" />
-                  </svg>
+                <h3 className="font-display text-xl md:text-2xl">{item.title}</h3>
+                <p className="text-sm text-fg-dim mb-3">{item.org}</p>
+                <p className="text-fg-dim leading-relaxed max-w-xl">{item.desc}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {item.stack.map((s) => (
+                    <span
+                      key={s}
+                      className="px-3 py-1 border border-line rounded-full font-mono text-xs text-fg-dim"
+                    >
+                      {s}
+                    </span>
+                  ))}
                 </div>
-                <h3 className="text-xl font-bold text-black">Education</h3>
-              </div>
-
-              <div className="relative pl-6 border-l-2 border-gray-200">
-                {/* B.Tech */}
-                <div className="mb-8 relative">
-                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-black border-4 border-white shadow" />
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2020 – 2024</span>
-                      <span className="text-xs bg-black text-white px-2 py-0.5 rounded-full">Graduated</span>
-                    </div>
-                    <h4 className="text-base font-bold text-black mb-1">
-                      B.Tech — Computer Science Engineering
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-3">JNTU-Kakinada</p>
-                    <p className="text-sm text-gray-700">
-                      Bachelor of Technology specialising in Computer Science Engineering, with a focus on Machine Learning, Data Science, and Software Development. Graduated in 2024.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {["Python", "ML", "Data Science", "Java", "C++"].map((s) => (
-                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Experience Column */}
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-black">Experience</h3>
-              </div>
-
-              <div className="relative pl-6 border-l-2 border-gray-200 space-y-8">
-
-                {/* Current Role */}
-                <div className="relative">
-                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-black border-4 border-white shadow" />
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2025 – Present</span>
-                      <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">Current</span>
-                    </div>
-                    <h4 className="text-base font-bold text-black mb-1">
-                      IT Specialist — AI/ML & Full-Stack
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-3">Al-Mahroos Sons & Co.</p>
-                    <p className="text-sm text-gray-700">
-                      Leading development of scalable AI tools to automate the sales process. Building web applications using React, Node.js, and Oracle SQL.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {["Python", "React", "Node.js", "Oracle SQL", "TypeScript"].map((s) => (
-                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* System Admin */}
-                <div className="relative">
-                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-gray-400 border-4 border-white shadow" />
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">2024</span>
-                    </div>
-                    <h4 className="text-base font-bold text-black mb-1">
-                      System Administrator & Web Handler
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-3">RJE Technology Pvt. Ltd.</p>
-                    <p className="text-sm text-gray-700">
-                      Managed web infrastructure and maintained applications with a focus on performance, uptime, and user experience.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {["Vue.js", "Python", "MongoDB", "Docker"].map((s) => (
-                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Internship */}
-                <div className="relative">
-                  <div className="absolute -left-[1.65rem] top-1 w-4 h-4 rounded-full bg-gray-400 border-4 border-white shadow" />
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                    <div className="flex items-start justify-between mb-2">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Jan 2024 – Jul 2024</span>
-                      <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded-full">Internship</span>
-                    </div>
-                    <h4 className="text-base font-bold text-black mb-1">
-                      Software Development Intern
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-3">Fuzion 5 Technology</p>
-                    <p className="text-sm text-gray-700">
-                      Worked on full-stack web development projects, contributing to front-end UI design and back-end API integrations during a 7-month internship.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {["React", "Node.js", "JavaScript", "REST APIs"].map((s) => (
-                        <span key={s} className="px-2 py-0.5 bg-white border border-gray-200 text-gray-700 rounded text-xs">{s}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Achievement highlight bar */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {[
-              { value: "3+", label: "Years of Experience" },
-              { value: "25+", label: "Projects Completed" },
-              { value: "2024", label: "B.Tech Graduate" },
-              { value: "7 mo", label: "Internship Duration" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                <div className="text-3xl font-bold text-black mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="text-center mt-10">
-            <Link
-              href="/about"
-              className="inline-flex items-center px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
-            >
-              View Full Profile
-              <SiGithub className="ml-2 h-4 w-4" />
-            </Link>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mt-8">
+            {stats.map((s) => (
+              <div key={s.label} className="border border-line rounded-2xl p-6">
+                <div className="font-display text-3xl text-accent mb-1">{s.value}</div>
+                <div className="text-sm text-fg-dim">{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Stats / Achievements Section */}
-      <section className="py-16 bg-gradient-to-r from-gray-900 to-blue-950 text-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">By the Numbers</h2>
-            <p className="text-xl text-gray-300">
-              Some stats that showcase my journey and impact
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiG2 className="h-8 w-8 mx-auto mb-4 text-blue-400" />
-                <div className="text-3xl font-bold mb-2">3+</div>
-                <div className="text-gray-300">Years Experience</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiGithub className="h-8 w-8 mx-auto mb-4 text-gray-400" />
-                <div className="text-3xl font-bold mb-2">100+</div>
-                <div className="text-gray-300">GitHub Repositories</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiCodepen className="h-8 w-8 mx-auto mb-4 text-black" />
-                <div className="text-3xl font-bold mb-2">100k+</div>
-                <div className="text-gray-300">Lines of Code</div>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiPython className="h-8 w-8 mx-auto mb-4 text-green-400" />
-                <div className="text-3xl font-bold mb-2">25+</div>
-                <div className="text-gray-300">Projects Completed</div>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiReact className="h-8 w-8 mx-auto mb-4 text-purple-400" />
-                <div className="text-3xl font-bold mb-2">15+</div>
-                <div className="text-gray-300">Happy Clients</div>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300">
-                <SiJavascript className="h-8 w-8 mx-auto mb-4 text-yellow-400" />
-                <div className="text-3xl font-bold mb-2">500+</div>
-                <div className="text-gray-300">Cups of Coffee</div>
-              </div>
-            </div>
+      {/* TESTIMONIALS */}
+      <section className="py-24 md:py-32 border-b border-line bg-bg-soft">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="05" label="What people say" />
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((t) => (
+              <motion.div
+                key={t.name}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.4 }}
+                className="border border-line rounded-2xl p-7 bg-bg-card"
+              >
+                <p className="text-fg leading-relaxed italic mb-6">&quot;{t.quote}&quot;</p>
+                <p className="font-mono text-sm text-accent">{t.name}</p>
+                <p className="text-xs text-fg-dim mt-1">{t.role}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              What People Say
-            </h2>
-            <p className="text-lg text-gray-600">
-              Testimonials from colleagues and clients
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-blue-900">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-950 rounded-full flex items-center justify-center text-white font-bold">
-                  JD
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">
-                    karuchola Lakshmi Sasidhar
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Cloud and Devops Enthusiastic, F5 technology pvt.ltd
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">
-                &quot;Exceptional problem-solving skills and attention to
-                detail. Delivered our project ahead of schedule with outstanding
-                quality.&quot;
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-green-900">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-950 rounded-full flex items-center justify-center text-white font-bold">
-                  DA
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">
-                    Dhruba Adhikari
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Chief Technology Officer, Khalti Pvt.Ltd
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">
-                &quot;Great communication and technical expertise. The web app
-                performance improved by 40% after optimization.&quot;
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-900">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gray-950 rounded-full flex items-center justify-center text-white font-bold">
-                  MJ
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-900">Ram Sharma</h4>
-                  <p className="text-sm text-gray-600">
-                    RJE technology pvt.ltd
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic">
-                &quot;Innovative solutions and clean code architecture. A
-                valuable team player with excellent collaboration skills.&quot;
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-950 to-green-900 text-white">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">Let&apos;s Work Together!</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-blue-100">
-            Ready to bring your ideas to life? I&apos;m available for freelance
-            projects, full-time opportunities, and exciting collaborations.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="inline-flex items-center px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300"
-            >
-              <SiMongodb className="mr-2 h-5 w-5" />
-              Get In Touch
-            </Link>
-
-            <Link
+      {/* CONTACT / FOOTER */}
+      <section id="contact" className="py-24 md:py-32">
+        <div className="container mx-auto px-6 md:px-10">
+          <Eyebrow index="06" label="Let's build something" />
+          <h2 className="font-display text-4xl md:text-7xl max-w-3xl leading-[1.05]">
+            Got a system worth automating?
+          </h2>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <a
               href="mailto:mrchandansharma25@gmail.com"
-              className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-accent text-bg font-mono text-sm font-medium rounded-full hover:scale-[1.03] transition-transform"
             >
-              Send Email
-            </Link>
-          </div>
-
-          <div className="flex justify-center space-x-6 mt-12">
-            <Link
+              <TbMail className="w-4 h-4" />
+              mrchandansharma25@gmail.com
+            </a>
+            <a
               href="https://github.com/chandan25sharma"
-              className="text-white/80 hover:text-white transition-colors"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
             >
-              <SiGithub className="h-8 w-8" />
-            </Link>
-            <Link
+              <TbBrandGithub className="w-4 h-4" /> GitHub <TbArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+            <a
               href="https://www.linkedin.com/in/chandan-sharma-55558b288"
-              className="text-white/80 hover:text-white transition-colors"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
             >
-              <SiLinkedin className="h-8 w-8" />
-            </Link>
-            <Link
-              href="https://codepen.io/Chandan25sharma"
-              className="text-white/80 hover:text-white transition-colors"
-            >
-              <SiCodepen className="h-8 w-8" />
-            </Link>
-            <Link
+              <TbBrandLinkedin className="w-4 h-4" /> LinkedIn <TbArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+            <a
               href="https://twitter.com/Chandan38643005"
-              className="text-white/80 hover:text-white transition-colors"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
             >
-              <SiX className="h-8 w-8" />
-            </Link>
+              <TbBrandX className="w-4 h-4" /> X <TbArrowUpRight className="w-3.5 h-3.5" />
+            </a>
           </div>
-        </div>
-      </section>
 
-      {/* Quick Links */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <Link href="/about" className="group">
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  About Me
-                </h3>
-                <p className="text-gray-600">
-                  Learn more about my background, skills, and experience in
-                  software development.
-                </p>
-              </div>
-            </Link>
-
-            <Link href="/projects" className="group">
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Projects
-                </h3>
-                <p className="text-gray-600">
-                  Explore my portfolio of applications, websites, and software
-                  solutions.
-                </p>
-              </div>
-            </Link>
-
-            <Link href="/research" className="group">
-              <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
-                  Research
-                </h3>
-                <p className="text-gray-600">
-                  Discover my research interests, publications, and
-                  contributions to the tech community.
-                </p>
-              </div>
-            </Link>
+          <div className="mt-24 pt-8 border-t border-line flex flex-col sm:flex-row justify-between gap-4 text-xs text-fg-dim font-mono">
+            <span>© {new Date().getFullYear()} Chandan Sharma</span>
+            <span className="flex items-center gap-2">
+              <TbBuildingSkyscraper className="w-3.5 h-3.5" />
+              <TbDatabase className="w-3.5 h-3.5" />
+              Built with Next.js &amp; ogl
+            </span>
           </div>
         </div>
       </section>

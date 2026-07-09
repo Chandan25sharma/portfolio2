@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Footer from "./components/Footer";
-import NavigationWrapper from "./components/NavigationWrapper";
+import { Fraunces, IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
+  axes: ["opsz", "SOFT", "WONK"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-mono-plex",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Chandan Sharma | Full-Stack Developer & AI Engineer",
+  title: "Chandan Sharma — Full-Stack & AI Engineer",
   description:
-    "Portfolio of Chandan Sharma — Full-Stack Developer specialising in AI/ML, React, Node.js and modern web technologies.",
+    "Portfolio of Chandan Sharma — building AI agents, e-commerce platforms, internal tools, Dynamics 365 and ERP systems.",
 };
 
 export default function RootLayout({
@@ -28,11 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
+        className={`${fraunces.variable} ${plexMono.variable} ${manrope.variable} antialiased bg-bg text-fg`}
       >
-        <NavigationWrapper />
-        <main className="pt-20">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
