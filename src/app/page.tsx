@@ -290,36 +290,44 @@ const spiralRings = [
 ];
 
 function SpiralRings({ phrases, className }: { phrases: string[]; className?: string }) {
+  const [texts, setTexts] = useState(() =>
+    spiralRings.map((_, i) =>
+      glitchify(`${phrases[i % phrases.length]} · `.repeat(8), seededRandom(7 + i * 13), 0.015)
+    )
+  );
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTexts((prev) => prev.map(reglitchLive));
+    }, 900);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <svg viewBox="-320 -320 640 640" className={className} aria-hidden="true">
-      {spiralRings.map((ring, i) => {
-        const phrase = phrases[i % phrases.length];
-        const rand = seededRandom(7 + i * 13);
-        const repeated = glitchify(`${phrase} · `.repeat(8), rand, 0.015);
-        return (
-          <g
-            key={ring.r}
-            style={{
-              animation: `spin-ring ${ring.duration}s linear infinite ${i % 2 ? "reverse" : ""}`,
-            }}
+      {spiralRings.map((ring, i) => (
+        <g
+          key={ring.r}
+          style={{
+            animation: `spin-ring ${ring.duration}s linear infinite ${i % 2 ? "reverse" : ""}`,
+          }}
+        >
+          <path
+            id={`spiral-ring-${ring.r}`}
+            d={`M ${-ring.r},0 a ${ring.r},${ring.r} 0 1,1 ${ring.r * 2},0 a ${ring.r},${ring.r} 0 1,1 ${-ring.r * 2},0`}
+            fill="none"
+          />
+          <text
+            fontSize={ring.size}
+            fill="currentColor"
+            opacity={0.5 - i * 0.07}
+            className="font-mono uppercase"
+            style={{ letterSpacing: "0.15em" }}
           >
-            <path
-              id={`spiral-ring-${ring.r}`}
-              d={`M ${-ring.r},0 a ${ring.r},${ring.r} 0 1,1 ${ring.r * 2},0 a ${ring.r},${ring.r} 0 1,1 ${-ring.r * 2},0`}
-              fill="none"
-            />
-            <text
-              fontSize={ring.size}
-              fill="currentColor"
-              opacity={0.5 - i * 0.07}
-              className="font-mono uppercase"
-              style={{ letterSpacing: "0.15em" }}
-            >
-              <textPath href={`#spiral-ring-${ring.r}`}>{repeated}</textPath>
-            </text>
-          </g>
-        );
-      })}
+            <textPath href={`#spiral-ring-${ring.r}`}>{texts[i]}</textPath>
+          </text>
+        </g>
+      ))}
     </svg>
   );
 }
@@ -389,14 +397,22 @@ function rabbitSdf(px: number, py: number) {
   return Math.min(head, Math.min(earL, earR));
 }
 
-function rabbitFeatures(px: number, py: number) {
-  const eyeL = sdCircle(px, py, -0.11, -0.18, 0.045);
-  const eyeR = sdCircle(px, py, 0.11, -0.18, 0.045);
+type EyeOffset = { x: number; y: number };
+
+// Pupils track `eye`; a blink swaps the round pupils for thin closed-lid segments.
+function rabbitFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
   const nose = sdCircle(px, py, 0, -0.32, 0.035);
+  if (blink) {
+    const lidL = sdSegment(px, py, -0.15 + eye.x, -0.18 + eye.y, -0.07 + eye.x, -0.18 + eye.y, 0.014);
+    const lidR = sdSegment(px, py, 0.07 + eye.x, -0.18 + eye.y, 0.15 + eye.x, -0.18 + eye.y, 0.014);
+    return Math.min(lidL, Math.min(lidR, nose));
+  }
+  const eyeL = sdCircle(px, py, -0.11 + eye.x, -0.18 + eye.y, 0.045);
+  const eyeR = sdCircle(px, py, 0.11 + eye.x, -0.18 + eye.y, 0.045);
   return Math.min(eyeL, Math.min(eyeR, nose));
 }
 
-function buildAsciiArt(cols: number, rows: number, seed: number) {
+function buildAsciiArt(cols: number, rows: number, seed: number, eye: EyeOffset, blink: boolean) {
   const rand = seededRandom(seed);
   const lines: string[] = [];
   for (let y = 0; y < rows; y++) {
@@ -405,7 +421,7 @@ function buildAsciiArt(cols: number, rows: number, seed: number) {
       const px = ((x / cols) * 2 - 1) * 0.55;
       const py = 1 - (y / rows) * 2;
       const d = rabbitSdf(px, py);
-      const f = rabbitFeatures(px, py);
+      const f = rabbitFeatures(px, py, eye, blink);
 
       let ch = " ";
       if (f < 0) {
@@ -427,9 +443,46 @@ function buildAsciiArt(cols: number, rows: number, seed: number) {
 }
 
 function AsciiArt({ seed = 101, className }: { seed?: number; className?: string }) {
-  const art = buildAsciiArt(56, 34, seed);
+  const preRef = useRef<HTMLPreElement>(null);
+  const [eye, setEye] = useState<EyeOffset>({ x: 0, y: 0 });
+  const [blink, setBlink] = useState(false);
+
+  // Pupils follow the cursor anywhere on the page — throttled to one
+  // recompute per animation frame so the 56x34 grid rebuild stays cheap.
+  useEffect(() => {
+    let raf = 0;
+    function onMove(e: MouseEvent) {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const el = preRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const nx = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
+        const ny = Math.max(-1, Math.min(1, ((e.clientY - rect.top) / rect.height) * 2 - 1));
+        setEye({ x: nx * 0.035, y: -ny * 0.02 });
+      });
+    }
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setBlink(true);
+      setTimeout(() => setBlink(false), 150);
+    }, 3800);
+    return () => clearInterval(id);
+  }, []);
+
+  const art = buildAsciiArt(56, 34, seed, eye, blink);
+
   return (
     <pre
+      ref={preRef}
       aria-hidden="true"
       className={`font-mono whitespace-pre select-none ${className ?? ""}`}
       style={{ fontSize: "0.85vw", lineHeight: "0.85vw" }}
@@ -569,10 +622,11 @@ export default function Home() {
 
       {/* FRICTION */}
       <section className="relative py-24 md:py-32 border-b border-line bg-bg-soft overflow-hidden">
-        <AsciiArt
-          seed={101}
-          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-[55%] text-fg-dim opacity-[0.3] hidden lg:block"
-        />
+        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-[55%] hidden lg:block">
+          <Reveal from="right" className="text-fg-dim opacity-[0.3]">
+            <AsciiArt seed={101} />
+          </Reveal>
+        </div>
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="02" label="The gap" />
           <h2 className="font-display text-3xl md:text-5xl max-w-2xl mb-14 md:mb-16 leading-[1.1]">
