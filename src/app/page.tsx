@@ -830,7 +830,7 @@ export default function Home() {
             "BUILT WITH NEXT.JS",
             "AVAILABLE FOR WORK",
           ]}
-          className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.18] select-none"
+          className="glitch-screen pointer-events-none absolute inset-0 text-fg-dim opacity-[0.18] select-none"
         />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="08" label="Let's build something" />
