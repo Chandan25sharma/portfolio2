@@ -9,6 +9,9 @@
   --line: rgba(243, 241, 234, 0.1);
   --accent: #d7ff3f;
   --accent-dim: rgba(215, 255, 63, 0.14);
+  --cream: #efe9dc;
+  --cream-fg: #17140e;
+  --cream-line: rgba(23, 20, 14, 0.12);
 }
 
 @theme inline {
@@ -19,6 +22,9 @@
   --color-fg-dim: var(--fg-dim);
   --color-line: var(--line);
   --color-accent: var(--accent);
+  --color-cream: var(--cream);
+  --color-cream-fg: var(--cream-fg);
+  --color-cream-line: var(--cream-line);
   --font-display: var(--font-bricolage);
   --font-mono: var(--font-mono-plex);
   --font-sans: var(--font-manrope);
@@ -109,6 +115,12 @@ body {
 }
 .spin-slow-reverse {
   animation: spin-slow-reverse 13s linear infinite;
+}
+
+@keyframes spin-ring {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .noise {

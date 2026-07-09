@@ -1,17 +1,15 @@
 ﻿"use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useGSAP } from "@gsap/react";
 import {
   TbArrowDown,
-  TbArrowUpRight,
   TbBrandAzure,
-  TbBrandGithub,
-  TbBrandLinkedin,
-  TbBrandX,
   TbBuildingSkyscraper,
   TbBuildingWarehouse,
   TbChartDots,
@@ -36,7 +34,6 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from "react-icons/si";
-import MetaBalls from "./components/MetaBalls";
 import LogoLoop from "./components/LogoLoop";
 
 const techLogos = [
@@ -217,24 +214,29 @@ function Eyebrow({ index, label }: { index: string; label: string }) {
   );
 }
 
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
+
+function scrollToId(id: string) {
+  gsap.to(window, { duration: 1, scrollTo: id, ease: "power3.inOut" });
+}
+
 function Reveal({
   children,
   from = "left",
   className,
+  style,
 }: {
   children: React.ReactNode;
   from?: "left" | "right";
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const el = ref.current;
-    if (!el) return;
-    const ctx = gsap.context(() => {
+  useGSAP(
+    () => {
       gsap.fromTo(
-        el,
+        ref.current,
         { x: from === "left" ? -70 : 70, opacity: 0 },
         {
           x: 0,
@@ -242,19 +244,119 @@ function Reveal({
           duration: 0.9,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: el,
+            trigger: ref.current,
             start: "top 88%",
             toggleActions: "play none none reverse",
           },
         }
       );
-    }, ref);
-    return () => ctx.revert();
-  }, [from]);
+    },
+    { scope: ref, dependencies: [from] }
+  );
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={style}>
       {children}
+    </div>
+  );
+}
+
+// Deterministic PRNG (seeded) so server-rendered and client-rendered glitch
+// text match exactly — avoids hydration mismatch from Math.random().
+function seededRandom(seed: number) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+const GLITCH_CHARS = "01#%&*+=-_/\\<>[]?".split("");
+
+function glitchify(text: string, rand: () => number, density = 0.07) {
+  return text
+    .split("")
+    .map((ch) => (ch !== " " && ch !== "·" && rand() < density ? GLITCH_CHARS[Math.floor(rand() * GLITCH_CHARS.length)] : ch))
+    .join("");
+}
+
+const spiralRings = [
+  { r: 70, size: 10, duration: 45 },
+  { r: 120, size: 11, duration: 60 },
+  { r: 175, size: 12, duration: 75 },
+  { r: 235, size: 13, duration: 95 },
+  { r: 300, size: 14, duration: 115 },
+];
+
+function SpiralRings({ text, className }: { text: string; className?: string }) {
+  const rand = seededRandom(7);
+  return (
+    <svg viewBox="-320 -320 640 640" className={className} aria-hidden="true">
+      {spiralRings.map((ring, i) => {
+        const repeated = glitchify(`${text} · `.repeat(8), rand);
+        return (
+          <g
+            key={ring.r}
+            style={{
+              animation: `spin-ring ${ring.duration}s linear infinite ${i % 2 ? "reverse" : ""}`,
+            }}
+          >
+            <path
+              id={`spiral-ring-${ring.r}`}
+              d={`M ${-ring.r},0 a ${ring.r},${ring.r} 0 1,1 ${ring.r * 2},0 a ${ring.r},${ring.r} 0 1,1 ${-ring.r * 2},0`}
+              fill="none"
+            />
+            <text
+              fontSize={ring.size}
+              fill="currentColor"
+              opacity={0.5 - i * 0.07}
+              className="font-mono uppercase"
+              style={{ letterSpacing: "0.15em" }}
+            >
+              <textPath href={`#spiral-ring-${ring.r}`}>{repeated}</textPath>
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function buildGlitchRow(phrase: string, seed: number) {
+  return glitchify(`${phrase} · `.repeat(6), seededRandom(seed));
+}
+
+function reglitchLive(row: string) {
+  const chars = row.split("");
+  const hits = 3 + Math.floor(Math.random() * 5);
+  for (let k = 0; k < hits; k++) {
+    const idx = Math.floor(Math.random() * chars.length);
+    if (chars[idx] === " " || chars[idx] === "·") continue;
+    chars[idx] = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+  }
+  return chars.join("");
+}
+
+function GlitchBlock({ phrases, className }: { phrases: string[]; className?: string }) {
+  const [rows, setRows] = useState(() =>
+    Array.from({ length: 90 }, (_, i) => buildGlitchRow(phrases[i % phrases.length], 19 + i))
+  );
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setRows((prev) => prev.map(reglitchLive));
+    }, 1100);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className={className} aria-hidden="true">
+      {rows.map((row, i) => (
+        <div key={i} className="whitespace-nowrap font-mono text-[11px] uppercase tracking-wider leading-[1.9]">
+          {row}
+        </div>
+      ))}
     </div>
   );
 }
@@ -263,73 +365,71 @@ export default function Home() {
   return (
     <div className="bg-bg text-fg overflow-x-hidden">
       {/* HERO */}
-      <section className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden border-b border-line">
-        <div className="absolute inset-0">
-          <MetaBalls
-            color="#d7ff3f"
-            cursorBallColor="#f3f1ea"
-            cursorBallSize={2.4}
-            ballCount={14}
-            animationSize={26}
-            enableMouseInteraction
-            enableTransparency
-            hoverSmoothness={0.12}
-            clumpFactor={1.1}
-            speed={0.25}
-          />
-        </div>
-        <div className="noise" />
-        <div className="relative z-10 container mx-auto px-6 md:px-10">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="font-mono text-xs md:text-sm text-accent tracking-[0.3em] uppercase mb-6"
-          >
-            Full-Stack &amp; AI Engineer
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display text-[13vw] md:text-[7.5vw] leading-[0.95] tracking-tight max-w-5xl"
-          >
-            Chandan Sharma
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-            className="mt-6 max-w-xl text-base md:text-lg text-fg-dim leading-relaxed"
-          >
-            I build AI agents, e-commerce platforms, internal tools and
-            enterprise systems — turning messy business processes into
-            software people actually want to use.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-10 flex flex-wrap gap-4"
-          >
-            <a
-              href="#work"
-              className="px-7 py-3.5 bg-accent text-bg font-mono text-sm font-medium rounded-full hover:scale-[1.03] transition-transform"
+      <section className="relative min-h-[100svh] border-b border-line overflow-hidden">
+        <div className="grid md:grid-cols-2 min-h-[100svh]">
+          {/* LEFT — light panel */}
+          <div className="relative bg-cream text-cream-fg flex flex-col justify-center px-6 md:px-14 py-24 md:py-0">
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="font-mono text-xs md:text-sm text-cream-fg/60 tracking-[0.3em] uppercase mb-6"
             >
-              See my work
-            </a>
-            <a
-              href="#contact"
-              className="px-7 py-3.5 border border-line text-fg font-mono text-sm rounded-full hover:border-accent hover:text-accent transition-colors"
+              Full-Stack &amp; AI Engineer
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="font-display text-[13vw] md:text-[5.2vw] leading-[0.95] tracking-tight"
             >
-              Get in touch
-            </a>
-          </motion.div>
+              Chandan
+              <br />
+              Sharma
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.25 }}
+              className="mt-6 max-w-md text-base md:text-lg text-cream-fg/70 leading-relaxed"
+            >
+              I build AI agents, e-commerce platforms, internal tools and
+              enterprise systems — turning messy business processes into
+              software people actually want to use.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="mt-14 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] text-cream-fg/60 uppercase tracking-widest"
+            >
+              <span>Available — Yes</span>
+              <span>Based — Remote</span>
+              <span>Role — Full-Stack &amp; AI</span>
+              <span>Status — Active</span>
+            </motion.div>
+          </div>
+
+          {/* RIGHT — dark panel with spinning text rings */}
+          <div className="relative bg-bg overflow-hidden hidden md:block">
+            <div className="noise" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <SpiralRings
+                text="CHANDAN SHARMA · FULL-STACK & AI ENGINEER"
+                className="w-[130%] h-[130%] text-fg"
+              />
+            </div>
+          </div>
         </div>
         <a
           href="#about"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToId("#about");
+          }}
           aria-label="Scroll to content"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-fg-dim hover:text-accent transition-colors animate-bounce"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white mix-blend-difference transition-opacity hover:opacity-70 animate-bounce"
         >
           <TbArrowDown className="w-5 h-5" />
         </a>
@@ -340,11 +440,8 @@ export default function Home() {
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="01" label="About" />
           <div className="grid md:grid-cols-[1fr_1.3fr] gap-12 md:gap-16 items-start">
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
+            <Reveal
+              from="left"
               className="relative w-40 h-40 md:w-56 md:h-56 rounded-2xl overflow-hidden border border-line"
             >
               <Image
@@ -354,13 +451,8 @@ export default function Home() {
                 sizes="224px"
                 className="object-cover grayscale"
               />
-            </motion.div>
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.4 }}
-            >
+            </Reveal>
+            <Reveal from="right">
               <p className="font-display text-2xl md:text-4xl leading-snug text-fg">
                 Three years turning ambiguous requirements into
                 <span className="text-accent"> production software</span> —
@@ -383,7 +475,7 @@ export default function Home() {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -396,18 +488,16 @@ export default function Home() {
             A demo isn&apos;t a product. Most builds stall right there.
           </h2>
           <div className="max-w-2xl border-t border-line">
-            {friction.map((line) => (
-              <motion.div
+            {friction.map((line, i) => (
+              <Reveal
                 key={line}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.6 }}
+                from={i % 2 === 0 ? "left" : "right"}
                 className="border-b border-line py-5 flex items-start gap-4"
+                style={{ marginLeft: i * 22 }}
               >
                 <span className="text-accent font-mono text-sm mt-0.5">×</span>
                 <p className="text-fg-dim leading-relaxed">{line}</p>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
           <motion.p
@@ -450,12 +540,9 @@ export default function Home() {
 
           <div className="border-t border-line">
             {work.map((item, i) => (
-              <motion.div
+              <Reveal
                 key={item.tag}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
+                from={i % 2 === 0 ? "left" : "right"}
                 className="group border-b border-line py-6 md:py-7 flex flex-col md:flex-row md:items-baseline gap-2 md:gap-10"
               >
                 <span className="font-mono text-xs text-fg-dim w-8 shrink-0">
@@ -465,7 +552,7 @@ export default function Home() {
                   {item.tag}
                 </h3>
                 <p className="text-fg-dim leading-relaxed max-w-lg">{item.desc}</p>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -496,13 +583,10 @@ export default function Home() {
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="05" label="Journey" />
           <div className="max-w-3xl">
-            {timeline.map((item) => (
-              <motion.div
+            {timeline.map((item, i) => (
+              <Reveal
                 key={item.title}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.4 }}
+                from={i % 2 === 0 ? "left" : "right"}
                 className="relative pl-8 pb-12 border-l border-line last:pb-0"
               >
                 <span className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent" />
@@ -529,7 +613,7 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
 
@@ -549,19 +633,16 @@ export default function Home() {
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="06" label="What people say" />
           <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <motion.div
+            {testimonials.map((t, i) => (
+              <Reveal
                 key={t.name}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.4 }}
+                from={i % 2 === 0 ? "left" : "right"}
                 className="border border-line rounded-2xl p-7 bg-bg-card"
               >
                 <p className="text-fg leading-relaxed italic mb-6">&quot;{t.quote}&quot;</p>
                 <p className="font-mono text-sm text-accent">{t.name}</p>
                 <p className="text-xs text-fg-dim mt-1">{t.role}</p>
-              </motion.div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -572,24 +653,37 @@ export default function Home() {
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="07" label="Before you reach out" />
           <div className="max-w-2xl border-t border-line">
-            {faqs.map((item) => (
-              <details key={item.q} className="group border-b border-line py-5">
-                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none font-display text-lg md:text-xl">
-                  {item.q}
-                  <span className="font-mono text-fg-dim text-xl shrink-0 transition-transform group-open:rotate-45">
-                    +
-                  </span>
-                </summary>
-                <p className="text-fg-dim leading-relaxed mt-3 max-w-lg">{item.a}</p>
-              </details>
+            {faqs.map((item, i) => (
+              <Reveal key={item.q} from={i % 2 === 0 ? "left" : "right"}>
+                <details className="group border-b border-line py-5">
+                  <summary className="flex items-center justify-between gap-4 cursor-pointer list-none font-display text-lg md:text-xl">
+                    {item.q}
+                    <span className="font-mono text-fg-dim text-xl shrink-0 transition-transform group-open:rotate-45">
+                      +
+                    </span>
+                  </summary>
+                  <p className="text-fg-dim leading-relaxed mt-3 max-w-lg">{item.a}</p>
+                </details>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* CONTACT / FOOTER */}
-      <section id="contact" className="py-24 md:py-32">
-        <div className="container mx-auto px-6 md:px-10">
+      <section id="contact" className="relative py-24 md:py-32 overflow-hidden">
+        <GlitchBlock
+          phrases={[
+            "CHANDAN SHARMA",
+            "FULL-STACK DEVELOPER",
+            "AI ENGINEER",
+            "SHIPPED NOT PROTOTYPED",
+            "BUILT WITH NEXT.JS",
+            "AVAILABLE FOR WORK",
+          ]}
+          className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.18] select-none"
+        />
+        <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="08" label="Let's build something" />
           <h2 className="font-display text-4xl md:text-7xl max-w-3xl leading-[1.05]">
             Got a system worth automating?
@@ -597,44 +691,58 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap gap-4">
             <a
               href="mailto:mrchandansharma25@gmail.com"
-              className="inline-flex items-center gap-2 px-7 py-3.5 bg-accent text-bg font-mono text-sm font-medium rounded-full hover:scale-[1.03] transition-transform"
+              className="inline-flex rounded-full overflow-hidden border border-accent hover:scale-[1.03] transition-transform"
             >
-              <TbMail className="w-4 h-4" />
-              mrchandansharma25@gmail.com
-            </a>
-            <a
-              href="https://github.com/chandan25sharma"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
-            >
-              <TbBrandGithub className="w-4 h-4" /> GitHub <TbArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/chandan-sharma-55558b288"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
-            >
-              <TbBrandLinkedin className="w-4 h-4" /> LinkedIn <TbArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-            <a
-              href="https://twitter.com/Chandan38643005"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 border border-line rounded-full font-mono text-sm hover:border-accent hover:text-accent transition-colors"
-            >
-              <TbBrandX className="w-4 h-4" /> X <TbArrowUpRight className="w-3.5 h-3.5" />
+              <span className="flex items-center gap-2 px-6 py-3.5 bg-accent text-bg font-mono text-sm font-medium">
+                <TbMail className="w-4 h-4" /> SAY
+              </span>
+              <span className="flex items-center px-6 py-3.5 bg-bg-card text-fg font-mono text-sm">
+                HELLO
+              </span>
             </a>
           </div>
 
-          <div className="mt-24 pt-8 border-t border-line flex flex-col sm:flex-row justify-between gap-4 text-xs text-fg-dim font-mono">
-            <span>Â© {new Date().getFullYear()} Chandan Sharma</span>
-            <span className="flex items-center gap-2">
-              <TbBuildingSkyscraper className="w-3.5 h-3.5" />
-              <TbDatabase className="w-3.5 h-3.5" />
-              Built with Next.js &amp; ogl
-            </span>
+          <div className="mt-24 pt-10 border-t border-line flex flex-col sm:flex-row justify-between items-start gap-10">
+            <div className="text-xs text-fg-dim font-mono">
+              <p>© {new Date().getFullYear()} Chandan Sharma</p>
+              <p className="mt-2 flex items-center gap-2">
+                <TbBuildingSkyscraper className="w-3.5 h-3.5" />
+                <TbDatabase className="w-3.5 h-3.5" />
+                Built with Next.js &amp; GSAP
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:items-end">
+              <a
+                href="https://github.com/chandan25sharma"
+                target="_blank"
+                rel="noreferrer"
+                className="font-display text-lg text-fg-dim hover:text-accent transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/chandan-sharma-55558b288"
+                target="_blank"
+                rel="noreferrer"
+                className="font-display text-lg text-fg-dim hover:text-accent transition-colors"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="https://twitter.com/Chandan38643005"
+                target="_blank"
+                rel="noreferrer"
+                className="font-display text-lg text-fg-dim hover:text-accent transition-colors"
+              >
+                X / Twitter
+              </a>
+              <a
+                href="mailto:mrchandansharma25@gmail.com"
+                className="font-display text-lg text-fg-dim hover:text-accent transition-colors"
+              >
+                Email
+              </a>
+            </div>
           </div>
         </div>
       </section>
