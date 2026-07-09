@@ -545,7 +545,7 @@ export default function Home() {
           {/* RIGHT — dark panel with spinning text rings */}
           <div className="relative bg-bg overflow-hidden hidden md:block">
             <div className="noise" />
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="glitch-screen absolute inset-0 flex items-center justify-center">
               <SpiralRings
                 phrases={[
                   "SYS://ACTIVE",
