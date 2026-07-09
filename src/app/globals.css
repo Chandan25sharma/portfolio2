@@ -25,9 +25,9 @@
   --color-cream: var(--cream);
   --color-cream-fg: var(--cream-fg);
   --color-cream-line: var(--cream-line);
-  --font-display: var(--font-bricolage);
-  --font-mono: var(--font-mono-plex);
-  --font-sans: var(--font-manrope);
+  --font-display: var(--font-inter);
+  --font-mono: var(--font-ubuntu-mono);
+  --font-sans: var(--font-inter);
 }
 
 * {

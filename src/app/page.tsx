@@ -289,12 +289,13 @@ const spiralRings = [
   { r: 300, size: 14, duration: 115 },
 ];
 
-function SpiralRings({ text, className }: { text: string; className?: string }) {
-  const rand = seededRandom(7);
+function SpiralRings({ phrases, className }: { phrases: string[]; className?: string }) {
   return (
     <svg viewBox="-320 -320 640 640" className={className} aria-hidden="true">
       {spiralRings.map((ring, i) => {
-        const repeated = glitchify(`${text} · `.repeat(8), rand);
+        const phrase = phrases[i % phrases.length];
+        const rand = seededRandom(7 + i * 13);
+        const repeated = glitchify(`${phrase} · `.repeat(8), rand, 0.015);
         return (
           <g
             key={ring.r}
@@ -324,7 +325,7 @@ function SpiralRings({ text, className }: { text: string; className?: string }) 
 }
 
 function buildGlitchRow(phrase: string, seed: number) {
-  return glitchify(`${phrase} · `.repeat(6), seededRandom(seed));
+  return glitchify(`${phrase} · `.repeat(6), seededRandom(seed), 0.03);
 }
 
 function reglitchLive(row: string) {
@@ -416,7 +417,16 @@ export default function Home() {
             <div className="noise" />
             <div className="absolute inset-0 flex items-center justify-center">
               <SpiralRings
-                text="CHANDAN SHARMA · FULL-STACK & AI ENGINEER"
+                phrases={[
+                  "SYS://ACTIVE",
+                  "AUTOMATION",
+                  "0X4F91 BUILD_OK",
+                  "AI SYSTEMS",
+                  "NODE_ACTIVE",
+                  "DEPLOY READY",
+                  "PYTHON · REACT · GSAP",
+                  "REMOTE · AVAILABLE",
+                ]}
                 className="w-[130%] h-[130%] text-fg"
               />
             </div>
