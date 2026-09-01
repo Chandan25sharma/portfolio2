@@ -155,12 +155,6 @@ body {
   animation: spin-slow-reverse 13s linear infinite;
 }
 
-@keyframes spin-ring {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .noise {
   position: absolute;
   inset: 0;

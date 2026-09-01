@@ -1,9 +1,9 @@
 ﻿"use client";
 
+import { PrismaHero } from "@/components/ui/prisma-hero";
 import { useGSAP } from "@gsap/react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -21,7 +21,6 @@ import {
   SiTypescript,
 } from "react-icons/si";
 import {
-  TbArrowDown,
   TbBrandAzure,
   TbBuildingSkyscraper,
   TbBuildingWarehouse,
@@ -214,11 +213,7 @@ function Eyebrow({ index, label }: { index: string; label: string }) {
   );
 }
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, useGSAP);
-
-function scrollToId(id: string) {
-  gsap.to(window, { duration: 1, scrollTo: id, ease: "power3.inOut" });
-}
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function Reveal({
   children,
@@ -279,78 +274,6 @@ function glitchify(text: string, rand: () => number, density = 0.07) {
     .split("")
     .map((ch) => (ch !== " " && ch !== "·" && rand() < density ? GLITCH_CHARS[Math.floor(rand() * GLITCH_CHARS.length)] : ch))
     .join("");
-}
-
-const spiralRings = [
-  { r: 40, size: 7, duration: 34 },
-  { r: 68, size: 7.5, duration: 41 },
-  { r: 96, size: 8, duration: 48 },
-  { r: 124, size: 8.5, duration: 55 },
-  { r: 152, size: 9, duration: 62 },
-  { r: 180, size: 9.5, duration: 69 },
-  { r: 208, size: 10, duration: 76 },
-  { r: 236, size: 10.5, duration: 83 },
-  { r: 264, size: 11, duration: 90 },
-  { r: 292, size: 11.5, duration: 97 },
-  { r: 320, size: 12, duration: 104 },
-  { r: 348, size: 12.5, duration: 111 },
-  { r: 376, size: 13, duration: 118 },
-  { r: 404, size: 13.5, duration: 125 },
-
-  // Added rings 👇
-  { r: 432, size: 14, duration: 132 },
-  { r: 460, size: 14.5, duration: 139 },
-  { r: 488, size: 15, duration: 146 },
-  { r: 516, size: 15.5, duration: 153 },
-  { r: 544, size: 16, duration: 160 },
-  { r: 572, size: 16.5, duration: 167 },
-  { r: 600, size: 17, duration: 174 },
-  { r: 628, size: 17.5, duration: 181 },
-  { r: 656, size: 18, duration: 188 },
-  { r: 684, size: 18.5, duration: 195 },
-];
-
-function SpiralRings({ phrases, className }: { phrases: string[]; className?: string }) {
-  const [texts, setTexts] = useState(() =>
-    spiralRings.map((_, i) =>
-      glitchify(`${phrases[i % phrases.length]} · `.repeat(8), seededRandom(7 + i * 13), 0.015)
-    )
-  );
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTexts((prev) => prev.map(reglitchLive));
-    }, 900);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <svg viewBox="-420 -420 840 840" className={className} aria-hidden="true">
-      {spiralRings.map((ring, i) => (
-        <g
-          key={ring.r}
-          style={{
-            animation: `spin-ring ${ring.duration}s linear infinite ${i % 2 ? "reverse" : ""}`,
-          }}
-        >
-          <path
-            id={`spiral-ring-${ring.r}`}
-            d={`M ${-ring.r},0 a ${ring.r},${ring.r} 0 1,1 ${ring.r * 2},0 a ${ring.r},${ring.r} 0 1,1 ${-ring.r * 2},0`}
-            fill="none"
-          />
-          <text
-            fontSize={ring.size}
-            fill="currentColor"
-            opacity={Math.max(0.12, 0.55 - i * 0.035)}
-            className="font-mono uppercase"
-            style={{ letterSpacing: "0.15em" }}
-          >
-            <textPath href={`#spiral-ring-${ring.r}`}>{texts[i]}</textPath>
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
 }
 
 function buildGlitchRow(phrase: string, seed: number) {
@@ -517,84 +440,7 @@ export default function Home() {
   return (
     <div className="bg-bg text-fg overflow-x-hidden">
       {/* HERO */}
-      <section className="relative min-h-[100svh] border-b border-line overflow-hidden">
-        <div className="grid md:grid-cols-2 min-h-[100svh]">
-          {/* LEFT — light panel */}
-          <div className="relative bg-cream text-cream-fg flex flex-col justify-center px-6 md:px-14 py-24 md:py-0">
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="font-mono text-xs md:text-sm text-cream-fg/60 tracking-[0.3em] uppercase mb-6"
-            >
-              Full-Stack &amp; AI Engineer
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="font-display text-[13vw] md:text-[5.2vw] leading-[0.95] tracking-tight"
-            >
-              Chandan
-              <br />
-              Sharma
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.25 }}
-              className="mt-6 max-w-md text-base md:text-lg text-cream-fg/70 leading-relaxed"
-            >
-              I build AI agents, e-commerce platforms, internal tools and
-              enterprise systems — turning messy business processes into
-              software people actually want to use.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-14 flex flex-wrap gap-x-8 gap-y-2 font-mono text-[11px] text-cream-fg/60 uppercase tracking-widest"
-            >
-              <span>Available — Yes</span>
-              <span>Based — Remote</span>
-              <span>Role — Full-Stack &amp; AI</span>
-              <span>Status — Active</span>
-            </motion.div>
-          </div>
-
-          {/* RIGHT — dark panel with spinning text rings */}
-          <div className="relative bg-bg overflow-hidden hidden md:block">
-            <div className="noise" />
-            <div className="glitch-screen absolute inset-0 flex items-center justify-center">
-              <SpiralRings
-                phrases={[
-                  "SYS://ACTIVE",
-                  "AUTOMATION",
-                  "0X4F91 BUILD_OK",
-                  "AI SYSTEMS",
-                  "NODE_ACTIVE",
-                  "DEPLOY READY",
-                  "PYTHON · REACT · GSAP",
-                  "REMOTE · AVAILABLE",
-                ]}
-                className="w-[130%] h-[130%] text-fg"
-              />
-            </div>
-          </div>
-        </div>
-        <a
-          href="#about"
-          onClick={(e) => {
-            e.preventDefault();
-            scrollToId("#about");
-          }}
-          aria-label="Scroll to content"
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white mix-blend-difference transition-opacity hover:opacity-70 animate-bounce"
-        >
-          <TbArrowDown className="w-5 h-5" />
-        </a>
-      </section>
+      <PrismaHero />
 
       {/* ABOUT */}
       <section id="about" className="py-24 md:py-32 border-b border-line">
@@ -606,7 +452,7 @@ export default function Home() {
               className="relative w-40 h-40 md:w-56 md:h-56 rounded-2xl overflow-hidden border border-line"
             >
               <Image
-                src="/images/profile.jpg"
+                src="/images/image.jpeg"
                 alt="Chandan Sharma"
                 fill
                 sizes="224px"
@@ -745,7 +591,7 @@ export default function Home() {
       </section>
 
       {/* JOURNEY */}
-      <section className="py-24 md:py-32 border-b border-line">
+      <section id="journey" className="py-24 md:py-32 border-b border-line">
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="05" label="Journey" />
           <div className="max-w-3xl">
@@ -795,7 +641,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 md:py-32 border-b border-line bg-bg-soft">
+      <section id="testimonials" className="py-24 md:py-32 border-b border-line bg-bg-soft">
         <div className="container mx-auto px-6 md:px-10">
           <Eyebrow index="06" label="What people say" />
           <div className="grid md:grid-cols-3 gap-6">
