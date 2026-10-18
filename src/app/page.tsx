@@ -22,16 +22,14 @@ import {
 } from "react-icons/si";
 import {
   TbBrandAzure,
-  TbBuildingSkyscraper,
   TbBuildingWarehouse,
   TbChartDots,
   TbCloudComputing,
-  TbDatabase,
   TbMail,
   TbRobot,
   TbShoppingCart,
   TbTerminal2,
-  TbTool,
+  TbTool
 } from "react-icons/tb";
 import LogoLoop from "./components/LogoLoop";
 
@@ -505,7 +503,6 @@ export default function Home() {
                 key={line}
                 from={i % 2 === 0 ? "left" : "right"}
                 className="border-b border-line py-5 flex items-start gap-4"
-                style={{ marginLeft: i * 22 }}
               >
                 <span className="text-accent font-mono text-sm mt-0.5">×</span>
                 <p className="text-fg-dim leading-relaxed">{line}</p>
@@ -542,7 +539,7 @@ export default function Home() {
                     hidden: { y: "110%" },
                     show: { y: "0%", transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
                   }}
-                  className={`inline-block ${i >= 2 ? "shine-text" : ""}`}
+                  className="inline-block"
                 >
                   {word}
                 </motion.span>
@@ -662,10 +659,6 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="relative py-24 md:py-32 border-b border-line overflow-hidden">
-        <GlitchBlock
-          phrases={["FAQ", "BEFORE YOU REACH OUT", "NO SURPRISES", "READ FIRST", "SCOPED BY PROJECT"]}
-          className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.14] select-none"
-        />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="07" label="Before you reach out" />
           <div className="max-w-2xl border-t border-line">
@@ -697,7 +690,7 @@ export default function Home() {
             "BUILT WITH NEXT.JS",
             "AVAILABLE FOR WORK",
           ]}
-          className="glitch-screen pointer-events-none absolute inset-0 text-fg-dim opacity-[0.18] select-none"
+          className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.06] select-none"
         />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="08" label="Let's build something" />
@@ -719,14 +712,7 @@ export default function Home() {
           </div>
 
           <div className="mt-24 pt-10 border-t border-line flex flex-col sm:flex-row justify-between items-start gap-10">
-            <div className="text-xs text-fg-dim font-mono">
-              <p>© {new Date().getFullYear()} Chandan Sharma</p>
-              <p className="mt-2 flex items-center gap-2">
-                <TbBuildingSkyscraper className="w-3.5 h-3.5" />
-                <TbDatabase className="w-3.5 h-3.5" />
-                Built with Next.js &amp; GSAP
-              </p>
-            </div>
+          
             <div className="flex flex-col gap-2 sm:items-end">
               <a
                 href="https://github.com/chandan25sharma"

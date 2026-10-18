@@ -14,7 +14,7 @@ const ubuntuMono = Ubuntu_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chandan Sharma — Full-Stack & AI Engineer",
+  title: "Chandan Sharma",
   description:
     "Portfolio of Chandan Sharma — building AI agents, e-commerce platforms, internal tools, Dynamics 365 and ERP systems.",
 };
