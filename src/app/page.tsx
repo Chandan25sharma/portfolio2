@@ -354,7 +354,157 @@ function rabbitFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) 
   return Math.min(eyeL, Math.min(eyeR, nose));
 }
 
-function buildAsciiArt(cols: number, rows: number, seed: number, eye: EyeOffset, blink: boolean) {
+function sdBox(px: number, py: number, cx: number, cy: number, hw: number, hh: number, r = 0) {
+  const qx = Math.abs(px - cx) - hw + r;
+  const qy = Math.abs(py - cy) - hh + r;
+  return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r;
+}
+
+// A retro CRT monitor (bezel + neck + base) for the hero — the screen is hollow
+// so the face and scanlines read through it.
+function monitorScreen(px: number, py: number) {
+  return sdBox(px, py, 0, 0.12, 0.36, 0.38, 0.04);
+}
+
+function monitorSdf(px: number, py: number) {
+  const bezel = Math.max(sdBox(px, py, 0, 0.1, 0.47, 0.5, 0.06), -monitorScreen(px, py));
+  const neck = sdBox(px, py, 0, -0.5, 0.08, 0.1);
+  const base = sdBox(px, py, 0, -0.64, 0.3, 0.05, 0.03);
+  return Math.min(bezel, Math.min(neck, base));
+}
+
+function monitorFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
+  const mouth = sdSegment(px, py, -0.1, -0.06, 0.1, -0.06, 0.016);
+  if (blink) {
+    const lidL = sdSegment(px, py, -0.2 + eye.x, 0.2 + eye.y, -0.08 + eye.x, 0.2 + eye.y, 0.016);
+    const lidR = sdSegment(px, py, 0.08 + eye.x, 0.2 + eye.y, 0.2 + eye.x, 0.2 + eye.y, 0.016);
+    return Math.min(lidL, Math.min(lidR, mouth));
+  }
+  const eyeL = sdBox(px, py, -0.14 + eye.x, 0.2 + eye.y, 0.04, 0.06);
+  const eyeR = sdBox(px, py, 0.14 + eye.x, 0.2 + eye.y, 0.04, 0.06);
+  return Math.min(eyeL, Math.min(eyeR, mouth));
+}
+
+// A 3.5" floppy disk for the footer — hollow label carries the face,
+// the metal shutter slot is drawn solid.
+function floppyLabel(px: number, py: number) {
+  return sdBox(px, py, 0, -0.32, 0.34, 0.26, 0.03);
+}
+
+function floppySdf(px: number, py: number) {
+  const disk = Math.max(sdBox(px, py, 0, 0, 0.46, 0.66, 0.04), -sdBox(px, py, 0.46, 0.66, 0.07, 0.07));
+  return Math.max(disk, -floppyLabel(px, py));
+}
+
+function floppyFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
+  const slot = sdBox(px, py, 0.08, 0.46, 0.07, 0.14);
+  const mouth = sdSegment(px, py, -0.08, -0.42, 0.08, -0.42, 0.016);
+  const eyes = blink
+    ? Math.min(
+        sdSegment(px, py, -0.18 + eye.x, -0.24 + eye.y, -0.06 + eye.x, -0.24 + eye.y, 0.016),
+        sdSegment(px, py, 0.06 + eye.x, -0.24 + eye.y, 0.18 + eye.x, -0.24 + eye.y, 0.016)
+      )
+    : Math.min(
+        sdBox(px, py, -0.12 + eye.x, -0.24 + eye.y, 0.04, 0.05),
+        sdBox(px, py, 0.12 + eye.x, -0.24 + eye.y, 0.04, 0.05)
+      );
+  return Math.min(slot, Math.min(mouth, eyes));
+}
+
+// Shared blinking face: square pupils that track `eye`, flat lids on blink.
+function face(px: number, py: number, cx: number, cy: number, gap: number, eye: EyeOffset, blink: boolean) {
+  const ex = eye.x;
+  const ey = eye.y;
+  if (blink) {
+    return Math.min(
+      sdSegment(px, py, cx - gap - 0.05 + ex, cy + ey, cx - gap + 0.05 + ex, cy + ey, 0.016),
+      sdSegment(px, py, cx + gap - 0.05 + ex, cy + ey, cx + gap + 0.05 + ex, cy + ey, 0.016)
+    );
+  }
+  return Math.min(
+    sdBox(px, py, cx - gap + ex, cy + ey, 0.035, 0.05),
+    sdBox(px, py, cx + gap + ex, cy + ey, 0.035, 0.05)
+  );
+}
+
+// Game Boy: tall body, hollow screen with a face, d-pad + A/B buttons solid.
+function gameboyScreen(px: number, py: number) {
+  return sdBox(px, py, 0, 0.42, 0.26, 0.3, 0.03);
+}
+
+function gameboySdf(px: number, py: number) {
+  return Math.max(sdBox(px, py, 0, 0, 0.38, 0.88, 0.06), -gameboyScreen(px, py));
+}
+
+function gameboyFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
+  const eyes = face(px, py, 0, 0.48, 0.1, eye, blink);
+  const mouth = sdSegment(px, py, -0.06, 0.3, 0.06, 0.3, 0.016);
+  const dpad = Math.min(sdBox(px, py, -0.2, -0.3, 0.1, 0.035), sdBox(px, py, -0.2, -0.3, 0.035, 0.1));
+  const btns = Math.min(sdCircle(px, py, 0.14, -0.25, 0.045), sdCircle(px, py, 0.25, -0.33, 0.045));
+  const startSelect = Math.min(
+    sdSegment(px, py, -0.1, -0.6, -0.03, -0.6, 0.015),
+    sdSegment(px, py, 0.03, -0.6, 0.1, -0.6, 0.015)
+  );
+  return Math.min(Math.min(eyes, mouth), Math.min(dpad, Math.min(btns, startSelect)));
+}
+
+// Cassette tape: the two reel hubs are the eyes, the tape window is hollow.
+function cassetteWindow(px: number, py: number) {
+  return sdBox(px, py, 0, 0.1, 0.32, 0.16, 0.03);
+}
+
+function cassetteSdf(px: number, py: number) {
+  return Math.max(sdBox(px, py, 0, 0, 0.5, 0.44, 0.04), -cassetteWindow(px, py));
+}
+
+function cassetteFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
+  const reels = Math.min(
+    Math.abs(sdCircle(px, py, -0.18, 0.1, 0.07)) - 0.014,
+    Math.abs(sdCircle(px, py, 0.18, 0.1, 0.07)) - 0.014
+  );
+  const hubs = face(px, py, 0, 0.1, 0.18, { x: eye.x * 0.6, y: eye.y * 0.6 }, blink);
+  const holes = Math.min(sdCircle(px, py, -0.2, -0.32, 0.03), sdCircle(px, py, 0.2, -0.32, 0.03));
+  const label = sdSegment(px, py, -0.36, 0.36, 0.36, 0.36, 0.012);
+  return Math.min(Math.min(reels, hubs), Math.min(holes, label));
+}
+
+// CD-ROM: x is squashed by 1.55 so the disc reads round in a mono font.
+const CD_X = 1.55;
+
+function cdHole(px: number, py: number) {
+  return sdCircle(px * CD_X, py, 0, 0, 0.16);
+}
+
+function cdSdf(px: number, py: number) {
+  return Math.max(sdCircle(px * CD_X, py, 0, 0, 0.82), -cdHole(px, py));
+}
+
+function cdFeatures(px: number, py: number, eye: EyeOffset, blink: boolean) {
+  const q = px * CD_X;
+  const eyes = face(q, py, 0, 0.42, 0.24, { x: eye.x * CD_X, y: eye.y }, blink);
+  const mouth = sdSegment(q, py, -0.16, -0.4, 0.16, -0.4, 0.02);
+  const shine = q < -0.1 && py > 0.1 ? Math.abs(sdCircle(q, py, 0, 0, 0.62)) - 0.018 : 1;
+  return Math.min(eyes, Math.min(mouth, shine));
+}
+
+type Shape = {
+  body: (px: number, py: number) => number;
+  features: (px: number, py: number, eye: EyeOffset, blink: boolean) => number;
+  screen?: (px: number, py: number) => number;
+  // Features on solid body are cut out as blanks so they read against the shading.
+  carve?: boolean;
+};
+
+const SHAPES: Record<"rabbit" | "monitor" | "floppy" | "gameboy" | "cassette" | "cd", Shape> = {
+  gameboy: { body: gameboySdf, features: gameboyFeatures, screen: gameboyScreen, carve: true },
+  cassette: { body: cassetteSdf, features: cassetteFeatures, screen: cassetteWindow, carve: true },
+  cd: { body: cdSdf, features: cdFeatures, carve: true },
+  floppy: { body: floppySdf, features: floppyFeatures, screen: floppyLabel },
+  rabbit: { body: rabbitSdf, features: rabbitFeatures },
+  monitor: { body: monitorSdf, features: monitorFeatures, screen: monitorScreen },
+};
+
+function buildAsciiArt(shape: Shape, cols: number, rows: number, seed: number, eye: EyeOffset, blink: boolean) {
   const rand = seededRandom(seed);
   const lines: string[] = [];
   for (let y = 0; y < rows; y++) {
@@ -362,12 +512,15 @@ function buildAsciiArt(cols: number, rows: number, seed: number, eye: EyeOffset,
     for (let x = 0; x < cols; x++) {
       const px = ((x / cols) * 2 - 1) * 0.55;
       const py = 1 - (y / rows) * 2;
-      const d = rabbitSdf(px, py);
-      const f = rabbitFeatures(px, py, eye, blink);
+      const d = shape.body(px, py);
+      const f = shape.features(px, py, eye, blink);
 
       let ch = " ";
+      if (shape.screen && f >= 0 && y % 3 === 0 && shape.screen(px, py) < -0.02) {
+        ch = ".";
+      }
       if (f < 0) {
-        ch = ASCII_RAMP[ASCII_RAMP.length - 1];
+        ch = shape.carve && d < 0 ? " " : ASCII_RAMP[ASCII_RAMP.length - 1];
       } else if (d < 0) {
         const depth = Math.min(1, -d / 0.16);
         const hatch = Math.sin((px + py) * 45) * 0.18;
@@ -384,7 +537,15 @@ function buildAsciiArt(cols: number, rows: number, seed: number, eye: EyeOffset,
   return lines.join("\n");
 }
 
-function AsciiArt({ seed = 101, className }: { seed?: number; className?: string }) {
+function AsciiArt({
+  seed = 101,
+  shape = "rabbit",
+  className,
+}: {
+  seed?: number;
+  shape?: keyof typeof SHAPES;
+  className?: string;
+}) {
   const preRef = useRef<HTMLPreElement>(null);
   const [eye, setEye] = useState<EyeOffset>({ x: 0, y: 0 });
   const [blink, setBlink] = useState(false);
@@ -420,7 +581,7 @@ function AsciiArt({ seed = 101, className }: { seed?: number; className?: string
     return () => clearInterval(id);
   }, []);
 
-  const art = buildAsciiArt(56, 34, seed, eye, blink);
+  const art = buildAsciiArt(SHAPES[shape], 56, 34, seed, eye, blink);
 
   return (
     <pre
@@ -434,11 +595,22 @@ function AsciiArt({ seed = 101, className }: { seed?: number; className?: string
   );
 }
 
+// Decorative ASCII object pinned top-right of a section; wide screens only so it never crowds content.
+function SectionArt({ shape, seed }: { shape: keyof typeof SHAPES; seed: number }) {
+  return (
+    <div className="pointer-events-none absolute right-[4%] top-16 hidden xl:block">
+      <Reveal from="right" className="text-fg-dim opacity-40">
+        <AsciiArt shape={shape} seed={seed} />
+      </Reveal>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <div className="bg-bg text-fg overflow-x-hidden">
       {/* HERO */}
-      <PrismaHero />
+      <PrismaHero art={<AsciiArt shape="monitor" seed={7} />} />
 
       {/* ABOUT */}
       <section id="about" className="py-24 md:py-32 border-b border-line">
@@ -487,11 +659,7 @@ export default function Home() {
 
       {/* FRICTION */}
       <section className="relative py-24 md:py-32 border-b border-line bg-bg-soft overflow-hidden">
-        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 w-[55%] hidden lg:block">
-          <Reveal from="right" className="text-fg-dim opacity-[0.3]">
-            <AsciiArt seed={101} />
-          </Reveal>
-        </div>
+        <SectionArt shape="rabbit" seed={101} />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="02" label="The gap" />
           <h2 className="font-display text-3xl md:text-5xl max-w-2xl mb-14 md:mb-16 leading-[1.1]">
@@ -522,8 +690,9 @@ export default function Home() {
       </section>
 
       {/* WORK */}
-      <section id="work" className="py-24 md:py-32 border-b border-line">
-        <div className="container mx-auto px-6 md:px-10">
+      <section id="work" className="relative py-24 md:py-32 border-b border-line overflow-hidden">
+        <SectionArt shape="gameboy" seed={41} />
+        <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="03" label="Selected work" />
           <motion.h2
             variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
@@ -581,15 +750,16 @@ export default function Home() {
             gap={56}
             pauseOnHover
             fadeOut
-            fadeOutColor="#0a0a0b"
+            fadeOutColor="#000000"
             ariaLabel="Technology stack"
           />
         </div>
       </section>
 
       {/* JOURNEY */}
-      <section id="journey" className="py-24 md:py-32 border-b border-line">
-        <div className="container mx-auto px-6 md:px-10">
+      <section id="journey" className="relative py-24 md:py-32 border-b border-line overflow-hidden">
+        <SectionArt shape="cassette" seed={59} />
+        <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="05" label="Journey" />
           <div className="max-w-3xl">
             {timeline.map((item, i) => (
@@ -659,6 +829,7 @@ export default function Home() {
 
       {/* FAQ */}
       <section className="relative py-24 md:py-32 border-b border-line overflow-hidden">
+        <SectionArt shape="cd" seed={77} />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="07" label="Before you reach out" />
           <div className="max-w-2xl border-t border-line">
@@ -692,6 +863,7 @@ export default function Home() {
           ]}
           className="pointer-events-none absolute inset-0 text-fg-dim opacity-[0.06] select-none"
         />
+        <SectionArt shape="floppy" seed={23} />
         <div className="relative container mx-auto px-6 md:px-10">
           <Eyebrow index="08" label="Let's build something" />
           <h2 className="font-display text-4xl md:text-7xl max-w-3xl leading-[1.05]">

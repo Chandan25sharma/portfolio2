@@ -50,7 +50,7 @@ const navItems = [
   { label: "Contact", href: "#contact" },
 ];
 
-export const PrismaHero = () => {
+export const PrismaHero = ({ art }: { art?: React.ReactNode }) => {
   return (
     <section className="min-h-[100svh] w-full">
       <div className="relative h-[100svh] w-full overflow-hidden rounded-2xl bg-bg md:rounded-[2rem]">
@@ -62,6 +62,18 @@ export const PrismaHero = () => {
 
         {/* Bottom scrim for text legibility */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg/90" />
+
+        {/* ASCII art (desktop only) */}
+        {art && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.55 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="pointer-events-none absolute right-[4%] top-[10%] hidden text-fg-dim lg:block"
+          >
+            {art}
+          </motion.div>
+        )}
 
         {/* Navbar */}
         <nav className="absolute left-1/2 top-0 z-20 -translate-x-1/2">
@@ -96,9 +108,12 @@ export const PrismaHero = () => {
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="text-xs leading-relaxed text-fg-dim sm:text-sm md:text-base"
               >
-                Full-Stack &amp; AI Engineer building agents, e-commerce
-                platforms and enterprise systems that ship — not demos that
-                stall.
+                <span className="mb-2 block font-display text-sm text-fg sm:text-base md:text-lg">
+                  Engineering Intelligent Software for the Real World.
+                </span>
+                I build AI-powered applications, autonomous agents, and scalable
+                digital systems that turn complex problems into practical
+                solutions.
               </motion.p>
 
               <motion.a
